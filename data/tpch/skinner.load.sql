@@ -1,3 +1,5 @@
+-- Provide your own location to the table here
+
 load lineitem /home/bala/projects/data/tpch/lineitem.tbl | NULL;
 load nation /home/bala/projects/data/tpch/nation.tbl | NULL;
 load part /home/bala/projects/data/tpch/part.tbl | NULL;
