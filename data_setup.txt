@@ -1,0 +1,13 @@
+1) Creating TPCH database
+run jars/CreateDB.jar <<Name of database>> <<location>>
+
+2) Start skinner console
+run jars/Skinner.jar <<location as above>>
+
+3) Create database schema
+exec tpch/skinner.schema.sql
+
+4) Load data
+exec tpch/skinner.load.sql
+
+Now the TPCH data is loaded and is ready for analysis. Close the console.
