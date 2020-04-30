@@ -3,7 +3,7 @@ package config;
 /**
  * Configures debugging output for different stages of
  * query analysis and query processing.
- * 
+ *
  * @author immanueltrummer
  *
  */
@@ -19,7 +19,7 @@ public class LoggingConfig {
 	/**
 	 * Whether to log expressions after each transformation stage.
 	 */
-	public final static boolean EXPRESSIONS_VERBOSE = false;
+	public final static boolean EXPRESSIONS_VERBOSE = true;
 	/**
 	 * Whether to generate logging output while compiling expressions.
 	 */
@@ -35,7 +35,7 @@ public class LoggingConfig {
 	/**
 	 * Whether to generate verbose output about pre-processing.
 	 */
-	public final static boolean PREPROCESSING_VERBOSE = false;
+	public final static boolean PREPROCESSING_VERBOSE = true;
 	/**
 	 * Whether to generate verbose output during index creation.
 	 */

@@ -44,27 +44,27 @@ public class Indexer {
 	public static void indexAll(IndexingMode mode) throws Exception {
 		System.out.println("Indexing all key columns ...");
 		long startMillis = System.currentTimeMillis();
-		CatalogManager.currentDB.nameToTable.values().parallelStream().forEach(
-			tableInfo -> {
-				tableInfo.nameToCol.values().parallelStream().forEach(
-					columnInfo -> {
-						try {
-							if (mode.equals(IndexingMode.ALL) ||
-								(mode.equals(IndexingMode.ONLY_KEYS) &&
-							(columnInfo.isPrimary || columnInfo.isForeign))) {
-								String table = tableInfo.name;
-								String column = columnInfo.name;
-								ColumnRef colRef = new ColumnRef(table, column);
-								System.out.println("Indexing " + colRef + " ...");
-								index(colRef);								
+		CatalogManager.currentDB.nameToTable.values().forEach(
+				tableInfo -> {
+					tableInfo.nameToCol.values().forEach(
+							columnInfo -> {
+								try {
+									if (mode.equals(IndexingMode.ALL) ||
+											(mode.equals(IndexingMode.ONLY_KEYS) &&
+													(columnInfo.isPrimary || columnInfo.isForeign))) {
+										String table = tableInfo.name;
+										String column = columnInfo.name;
+										ColumnRef colRef = new ColumnRef(table, column);
+										System.out.println("Indexing " + colRef + " ...");
+										index(colRef);
+									}
+								} catch (Exception e) {
+									System.err.println("Error indexing " + columnInfo);
+									e.printStackTrace();
+								}
 							}
-						} catch (Exception e) {
-							System.err.println("Error indexing " + columnInfo);
-							e.printStackTrace();
-						}
-					}
-				);
-			}
+					);
+				}
 		);
 		long totalMillis = System.currentTimeMillis() - startMillis;
 		System.out.println("Indexing took " + totalMillis + " ms.");

@@ -1,27 +1,12 @@
 package preprocessing;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-
-import buffer.BufferManager;
 import config.LoggingConfig;
 import config.NamingConfig;
 import config.PreConfig;
 import expressions.ExpressionInfo;
-import indexing.Index;
 import indexing.Indexer;
-import indexing.IntIndex;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.schema.Column;
 import operators.Filter;
 import operators.IndexFilter;
 import operators.IndexTest;
@@ -31,13 +16,18 @@ import query.ColumnRef;
 import query.QueryInfo;
 import statistics.PreStats;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Filters query tables via unary predicates and stores
  * result in newly created tables. Creates hash tables
  * for columns with binary equality join predicates.
- * 
- * @author immanueltrummer
  *
+ * @author immanueltrummer
  */
 public class Preprocessor {
 	/**
@@ -80,13 +70,13 @@ public class Preprocessor {
 		Context preSummary = new Context();
 		// Initialize mapping for join and post-processing columns
 		for (ColumnRef queryRef : requiredCols) {
-			preSummary.columnMapping.put(queryRef, 
+			preSummary.columnMapping.put(queryRef,
 					DBref(query, queryRef));
 		}
 		// Initialize column mapping for unary predicate columns
 		for (ExpressionInfo unaryPred : query.unaryPredicates) {
 			for (ColumnRef queryRef : unaryPred.columnsMentioned) {
-				preSummary.columnMapping.put(queryRef, 
+				preSummary.columnMapping.put(queryRef,
 						DBref(query, queryRef));
 			}
 		}
@@ -94,7 +84,8 @@ public class Preprocessor {
 		preSummary.aliasToFiltered.putAll(query.aliasToTable);
 		log("Column mapping:\t" + preSummary.columnMapping.toString());
 		// Iterate over query aliases
-		query.aliasToTable.keySet().parallelStream().forEach(alias -> {
+		//query.aliasToTable.keySet().parallelStream().forEach(alias -> {
+		query.aliasToTable.keySet().forEach(alias -> {
 			// Collect required columns (for joins and post-processing) for this table
 			List<ColumnRef> curRequiredCols = new ArrayList<ColumnRef>();
 			for (ColumnRef requiredCol : requiredCols) {
@@ -286,11 +277,12 @@ public class Preprocessor {
 			throws Exception {
 		// Iterate over columns in equi-joins
 		long startMillis = System.currentTimeMillis();
-		query.equiJoinCols.parallelStream().forEach(queryRef -> {
+		//query.equiJoinCols.parallelStream().forEach(queryRef -> {
+		query.equiJoinCols.forEach(queryRef -> {
 			try {
 				// Resolve query-specific column reference
 				ColumnRef dbRef = preSummary.columnMapping.get(queryRef);
-				log("Creating index for " + queryRef + 
+				log("Creating index for " + queryRef +
 						" (query) - " + dbRef + " (DB)");
 				// Create index (unless it exists already)
 				Indexer.index(dbRef);

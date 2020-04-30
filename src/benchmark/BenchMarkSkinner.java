@@ -1,20 +1,5 @@
 package benchmark;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collectors;
-
-import joining.uct.UctNode;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Map.Entry;
-
 import buffer.BufferManager;
 import catalog.CatalogManager;
 import catalog.info.TableInfo;
@@ -23,8 +8,6 @@ import config.NamingConfig;
 import config.StartupConfig;
 import diskio.PathUtil;
 import expressions.ExpressionInfo;
-import expressions.normalization.CollationVisitor;
-import expressions.printing.PgPrinter;
 import indexing.Indexer;
 import joining.JoinProcessor;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -36,12 +19,18 @@ import query.ColumnRef;
 import query.QueryInfo;
 import statistics.JoinStats;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * Benchmarks pre-, join, and post-processing stage
  */
 public class BenchMarkSkinner {
 
     public static void main(String[] args) throws Exception{
+        Runtime rt = Runtime.getRuntime();
 
         // Check for command line parameters
         if (args.length != 1 && args.length != 2) {
@@ -60,9 +49,23 @@ public class BenchMarkSkinner {
         PathUtil.initDataPaths(CatalogManager.currentDB);
         System.out.println("Loading data ...");
         GeneralConfig.inMemory = true;
+
+        long beforeLoadingMillis = System.currentTimeMillis();
+        long memoryBeforeLoading = rt.totalMemory() - rt.freeMemory();
         BufferManager.loadDB();
+        long loadMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeLoading;
+        long loadingMillis = System.currentTimeMillis() - beforeLoadingMillis;
+        System.out.println("Used Memory for Loading: " + ((double) loadMemory) / 1024 / 1024 + " MB");
+        System.out.println("Millis for Loading: " + loadingMillis + " ms");
         System.out.println("Data loaded.");
+
+        long beforeIndexingMillis = System.currentTimeMillis();
+        long memoryBeforeIndexing = rt.totalMemory() - rt.freeMemory();
         Indexer.indexAll(StartupConfig.INDEX_CRITERIA);
+        long hashMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeIndexing;
+        long indexingMillis = System.currentTimeMillis() - beforeIndexingMillis;
+        System.out.println("Used Memory for Hashing: " + ((double) hashMemory) / 1024 / 1024 + " MB");
+        System.out.println("Millis for Hashing: " + indexingMillis + " ms");
 
         // Read all queries from files
         Map<String, PlainSelect> nameToQuery =

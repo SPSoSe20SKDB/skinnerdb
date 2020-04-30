@@ -1,10 +1,5 @@
 package joining.join;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import config.LoggingConfig;
 import config.PreConfig;
 import expressions.ExpressionInfo;
@@ -17,7 +12,11 @@ import preprocessing.Context;
 import query.QueryInfo;
 import statistics.JoinStats;
 
+import java.util.*;
+
 public class OldJoin extends MultiWayJoin {
+    public ArrayList<HashSet<Integer>> visitedTuples;
+
     /**
      * Number of steps per episode.
      */
@@ -165,26 +164,39 @@ public class OldJoin extends MultiWayJoin {
 	 * indices on the join column.
 	 * 
 	 * @param indexWrappers	list of join index wrappers
-	 * @param tupleIndices	current tuple indices
-	 * @return				next proposed tuple index
-	 */
-	int proposeNext(List<JoinIndexWrapper> indexWrappers, 
-			int curTable, int[] tupleIndices) {
-		if (indexWrappers.isEmpty()) {
-			return tupleIndices[curTable]+1;
-		}
-		int max = -1;
-		for (JoinIndexWrapper wrapper : indexWrappers) {
-			int nextRaw = wrapper.nextIndex(tupleIndices);
-			int next = nextRaw<0?cardinalities[curTable]:nextRaw;
-			max = Math.max(max, next);
-		}
-		if (max<0) {
-			System.out.println(Arrays.toString(tupleIndices));
-			System.out.println(indexWrappers.toString());
-		}
-		return max;
-	}
+     * @param tupleIndices    current tuple indices
+     * @return next proposed tuple index
+     */
+    int proposeNext(List<JoinIndexWrapper> indexWrappers,
+                    int curTable, int[] tupleIndices) {
+        if (indexWrappers.isEmpty()) {
+            return tupleIndices[curTable] + 1;
+        }
+        int max = -1;
+        for (JoinIndexWrapper wrapper : indexWrappers) {
+            int nextRaw = wrapper.nextIndex(tupleIndices);
+            int next = nextRaw < 0 ? cardinalities[curTable] : nextRaw;
+            max = Math.max(max, next);
+        }
+        if (max < 0) {
+            System.out.println(Arrays.toString(tupleIndices));
+            System.out.println(indexWrappers.toString());
+        }
+        return max;
+    }
+
+    private void addVisitedTuples(int[] tupelIndices) {
+        if (visitedTuples == null) {
+            visitedTuples = new ArrayList<>();
+            for (int tableCtr = 0; tableCtr < tupelIndices.length; ++tableCtr) {
+                visitedTuples.add(new HashSet<>());
+            }
+        }
+        for (int tableCtr = 0; tableCtr < tupelIndices.length; ++tableCtr) {
+            visitedTuples.get(tableCtr).add(tupelIndices[tableCtr]);
+        }
+    }
+
     /**
      * Executes a given join order for a given budget of steps
      * (i.e., predicate evaluations). Result tuples are added
@@ -214,8 +226,8 @@ public class OldJoin extends MultiWayJoin {
         // combination to look at.
         while (remainingBudget > 0 && joinIndex >= 0) {
         	++JoinStats.nrIterations;
-        	//log("Offsets:\t" + Arrays.toString(offsets));
-        	//log("Indices:\t" + Arrays.toString(tupleIndices));
+            //log("Offsets:\t" + Arrays.toString(offsets));
+            //log("Indices:\t" + Arrays.toString(tupleIndices));
             // Get next table in join order
             int nextTable = plan.joinOrder.order[joinIndex];
             int nextCardinality = cardinalities[nextTable];
@@ -225,17 +237,19 @@ public class OldJoin extends MultiWayJoin {
                     offsets[nextTable], tupleIndices[nextTable]);
             // Evaluate all applicable predicates on joined tuples
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
-            if ((PreConfig.PRE_FILTER || unaryPred == null || 
-            		unaryPred.evaluate(tupleIndices)>0) &&
-            		evaluateAll(applicablePreds.get(joinIndex), tupleIndices)) {
-            	++JoinStats.nrTuples;
+
+            addVisitedTuples(tupleIndices);
+            if ((PreConfig.PRE_FILTER || unaryPred == null ||
+                    unaryPred.evaluate(tupleIndices) > 0) &&
+                    evaluateAll(applicablePreds.get(joinIndex), tupleIndices)) {
+                ++JoinStats.nrTuples;
                 // Do we have a complete result row?
-                if(joinIndex == plan.joinOrder.order.length - 1) {
+                if (joinIndex == plan.joinOrder.order.length - 1) {
                     // Complete result row -> add to result
-                	++nrResultTuples;
+                    ++nrResultTuples;
                     result.add(tupleIndices);
                     tupleIndices[nextTable] = proposeNext(
-                    		joinIndices.get(joinIndex), nextTable, tupleIndices);
+                            joinIndices.get(joinIndex), nextTable, tupleIndices);
                     // Have reached end of current table? -> we backtrack.
                     while (tupleIndices[nextTable] >= nextCardinality) {
                         tupleIndices[nextTable] = 0;

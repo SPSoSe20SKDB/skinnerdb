@@ -1,0 +1,2 @@
+Query	Millis	PreMillis	PostMillis	Tuples	Iterations	Lookups	NrIndexEntries	nrUniqueLookups	NrUctNodes	NrPlans	JoinCard	NrSamples	AvgReward	MaxReward	TotalWork
+q03.sql	463	413	23	0	0	0	0	0	3	0	0	1	0.0	-Infinity	1.0
