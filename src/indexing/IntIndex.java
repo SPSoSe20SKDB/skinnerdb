@@ -3,7 +3,6 @@ package indexing;
 import com.koloboke.collect.map.IntIntCursor;
 import com.koloboke.collect.map.IntIntMap;
 import com.koloboke.collect.map.hash.HashIntIntMaps;
-
 import config.LoggingConfig;
 import data.IntData;
 import statistics.JoinStats;
@@ -71,17 +70,19 @@ public class IntIndex extends Index {
 				positions[startPos] += 1;
 				int offset = positions[startPos];
 				int pos = startPos + offset;
-				positions[pos] = i;				
+				positions[pos] = i;
 			}
 		}
 		// Output statistics for performance tuning
 		if (LoggingConfig.INDEXING_VERBOSE) {
 			long totalMillis = System.currentTimeMillis() - startMillis;
-			log("Created index for integer column with cardinality " + 
+			log("Created index for integer column with cardinality " +
 					cardinality + " in " + totalMillis + " ms.");
 		}
 		// Check index if enabled
 		IndexChecker.checkIndex(intData, this);
+
+		this.data = intData;
 	}
 	/**
 	 * Returns index of next tuple with given value

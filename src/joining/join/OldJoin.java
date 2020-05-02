@@ -1,14 +1,20 @@
 package joining.join;
 
+import buffer.BufferManager;
 import config.LoggingConfig;
 import config.PreConfig;
+import data.ColumnData;
+import data.DoubleData;
+import data.IntData;
 import expressions.ExpressionInfo;
 import expressions.compilation.KnaryBoolEval;
+import indexing.Index;
 import joining.plan.JoinOrder;
 import joining.plan.LeftDeepPlan;
 import joining.progress.ProgressTracker;
 import joining.progress.State;
 import preprocessing.Context;
+import query.ColumnRef;
 import query.QueryInfo;
 import statistics.JoinStats;
 
@@ -16,6 +22,7 @@ import java.util.*;
 
 public class OldJoin extends MultiWayJoin {
     public ArrayList<HashSet<Integer>> visitedTuples;
+    public ArrayList<Hashtable<Integer, Object[]>> currentHashTable;
 
     /**
      * Number of steps per episode.
@@ -197,6 +204,59 @@ public class OldJoin extends MultiWayJoin {
         }
     }
 
+    private void buildAdditionalHashTable(int table, int tupleIndex, List<List<JoinIndexWrapper>> indexWrappers) {
+        if (currentHashTable == null) {
+            currentHashTable = new ArrayList<>();
+            for (int tableCtr = 0; tableCtr < nrJoined; ++tableCtr) {
+                currentHashTable.add(new Hashtable<>());
+            }
+        }
+        Object[] tuple = getTupleFromTable(table, tupleIndex, indexWrappers);
+        currentHashTable.get(table).put(tupleIndex, tuple);
+    }
+
+    private Object[] getTupleFromTable(int table, int tupleIndex, List<List<JoinIndexWrapper>> indexWrappers) {
+        List<ColumnData> columnsForTable = new ArrayList<ColumnData>();
+        for (int i = 0; i < indexWrappers.size(); i++) {
+            List<JoinIndexWrapper> wrappers = indexWrappers.get(i);
+            for (int j = 0; j < wrappers.size(); j++) {
+                JoinIndexWrapper wrapper = wrappers.get(j);
+                if (BufferManager.colToData.containsValue(wrapper.priorData)) {
+                    for (Map.Entry<ColumnRef, ColumnData> columnRef : BufferManager.colToData.entrySet()) {
+                        if (wrapper.priorData.equals(columnRef.getValue())) {
+                            ColumnRef col = columnRef.getKey();
+                            if (query.aliases[table].equals(col.aliasName)) columnsForTable.add(columnRef.getValue());
+                            break;
+                        }
+                    }
+                }
+                if (BufferManager.colToIndex.containsValue(wrapper.nextIndex)) {
+                    for (Map.Entry<ColumnRef, Index> columnRef : BufferManager.colToIndex.entrySet()) {
+                        if (wrapper.nextIndex.equals(columnRef.getValue())) {
+                            ColumnRef col = columnRef.getKey();
+                            if (preSummary.aliasToFiltered.get(query.aliases[table]).equals(col.aliasName))
+                                columnsForTable.add(columnRef.getValue().data);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        Object[] ret = new Object[columnsForTable.size()];
+        for (int i = 0; i < columnsForTable.size(); i++) {
+            ColumnData data = columnsForTable.get(i);
+            switch (data.getClass().getSimpleName()) {
+                case "IntData":
+                    ret[i] = ((IntData) data).data[tupleIndex];
+                    break;
+                case "DoubleData":
+                    ret[i] = ((DoubleData) data).data[tupleIndex];
+                    break;
+            }
+        }
+        return ret;
+    }
+
     /**
      * Executes a given join order for a given budget of steps
      * (i.e., predicate evaluations). Result tuples are added
@@ -239,6 +299,7 @@ public class OldJoin extends MultiWayJoin {
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
 
             addVisitedTuples(tupleIndices);
+            buildAdditionalHashTable(nextTable, tupleIndices[nextTable], joinIndices);
             if ((PreConfig.PRE_FILTER || unaryPred == null ||
                     unaryPred.evaluate(tupleIndices) > 0) &&
                     evaluateAll(applicablePreds.get(joinIndex), tupleIndices)) {

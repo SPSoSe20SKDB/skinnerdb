@@ -1,23 +1,25 @@
 package indexing;
 
 import config.LoggingConfig;
+import data.ColumnData;
 
 /**
  * Common superclass of all indexing structures.
- * 
- * @author immanueltrummer
  *
+ * @author immanueltrummer
  */
 public abstract class Index {
-	/**
-	 * Cardinality of indexed table.
-	 */
-	public final int cardinality;
-	/**
-	 * After indexing: contains for each search key
-	 * the number of entries, followed by the row
-	 * numbers at which those entries are found.
-	 */
+    public ColumnData data;
+
+    /**
+     * Cardinality of indexed table.
+     */
+    public final int cardinality;
+    /**
+     * After indexing: contains for each search key
+     * the number of entries, followed by the row
+     * numbers at which those entries are found.
+     */
 	public int[] positions;
 	/**
 	 * Initialize for given cardinality of indexed table.

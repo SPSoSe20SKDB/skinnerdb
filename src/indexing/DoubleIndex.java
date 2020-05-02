@@ -3,7 +3,6 @@ package indexing;
 import com.koloboke.collect.map.DoubleIntCursor;
 import com.koloboke.collect.map.DoubleIntMap;
 import com.koloboke.collect.map.hash.HashDoubleIntMaps;
-
 import config.LoggingConfig;
 import data.DoubleData;
 import statistics.JoinStats;
@@ -71,15 +70,17 @@ public class DoubleIndex extends Index {
 				positions[startPos] += 1;
 				int offset = positions[startPos];
 				int pos = startPos + offset;
-				positions[pos] = i;				
+				positions[pos] = i;
 			}
 		}
 		// Output statistics for performance tuning
 		if (LoggingConfig.INDEXING_VERBOSE) {
 			long totalMillis = System.currentTimeMillis() - startMillis;
-			log("Created index for integer column with cardinality " + 
+			log("Created index for integer column with cardinality " +
 					cardinality + " in " + totalMillis + " ms.");
 		}
+
+		this.data = doubleData;
 	}
 	/**
 	 * Returns index of next tuple with given value
