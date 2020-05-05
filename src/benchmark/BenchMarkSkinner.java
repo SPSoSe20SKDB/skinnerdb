@@ -5,10 +5,8 @@ import catalog.CatalogManager;
 import catalog.info.TableInfo;
 import config.GeneralConfig;
 import config.NamingConfig;
-import config.StartupConfig;
 import diskio.PathUtil;
 import expressions.ExpressionInfo;
-import indexing.Indexer;
 import joining.JoinProcessor;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import postprocessing.PostProcessor;
@@ -61,7 +59,7 @@ public class BenchMarkSkinner {
 
         long beforeIndexingMillis = System.currentTimeMillis();
         long memoryBeforeIndexing = rt.totalMemory() - rt.freeMemory();
-        Indexer.indexAll(StartupConfig.INDEX_CRITERIA);
+        //Indexer.indexAll(StartupConfig.INDEX_CRITERIA);
         long hashMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeIndexing;
         long indexingMillis = System.currentTimeMillis() - beforeIndexingMillis;
         System.out.println("Used Memory for Hashing: " + ((double) hashMemory) / 1024 / 1024 + " MB");
@@ -83,7 +81,7 @@ public class BenchMarkSkinner {
             System.out.println(entry.getValue().toString());
             long startMillis = System.currentTimeMillis();
             QueryInfo query = new QueryInfo(entry.getValue(),
-                    false, -1, -1, "D:\\Projects\\skinnerdb\\");
+                    true, -1, -1, "D:\\Softwareprojekt\\plots");
             Context preSummary = Preprocessor.process(query);
             long preMillis = System.currentTimeMillis() - startMillis;
             JoinProcessor.process(query, preSummary);
