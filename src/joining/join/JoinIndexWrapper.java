@@ -1,8 +1,5 @@
 package joining.join;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import buffer.BufferManager;
 import config.LoggingConfig;
 import data.ColumnData;
@@ -10,6 +7,9 @@ import indexing.Index;
 import preprocessing.Context;
 import query.ColumnRef;
 import query.QueryInfo;
+
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Uses index on join column to identify next
@@ -35,16 +35,21 @@ public abstract class JoinIndexWrapper {
 	 */
 	final ColumnData priorData;
 	/**
+	 * Reference to next column data.
+	 */
+	final ColumnData nextData;
+	/**
 	 * Index on join column to use.
 	 */
-	final Index nextIndex;
+	Index nextIndex;
+
 	/**
 	 * Initialize index wrapper for
 	 * given query and join order.
-	 * 
-	 * @param queryInfo		query meta-data
-	 * @param preSummary	maps query columns to intermediate result columns
-	 * @param joinCols		pair of columns in equi-join predicate
+	 *
+	 * @param queryInfo        query meta-data
+	 * @param preSummary    maps query columns to intermediate result columns
+	 * @param joinCols        pair of columns in equi-join predicate
 	 * @param order			join order
 	 * @throws Exception
 	 */
@@ -61,16 +66,17 @@ public abstract class JoinIndexWrapper {
 		int pos1 = tablePos(order, table1);
 		int pos2 = tablePos(order, table2);
 		// Assign prior and next table accordingly
-		priorTable = pos1<pos2?table1:table2;
-		nextTable = pos1<pos2?table2:table1;
+		priorTable = pos1 < pos2 ? table1 : table2;
+		nextTable = pos1 < pos2 ? table2 : table1;
 		// Get column data reference for prior table
-		ColumnRef priorQueryCol = pos1<pos2?col1:col2;
+		ColumnRef priorQueryCol = pos1 < pos2 ? col1 : col2;
 		ColumnRef priorDbCol = preSummary.columnMapping.get(priorQueryCol);
 		priorData = BufferManager.getData(priorDbCol);
 		// Get index for next table
-		ColumnRef nextQueryCol = pos1<pos2?col2:col1;
+		ColumnRef nextQueryCol = pos1 < pos2 ? col2 : col1;
 		ColumnRef nextDbCol = preSummary.columnMapping.get(nextQueryCol);
 		nextIndex = BufferManager.colToIndex.get(nextDbCol);
+		nextData = BufferManager.colToData.get(nextDbCol);
 		// Generate logging output
 		if (LoggingConfig.INDEX_WRAPPER_VERBOSE) {
 			System.out.println("Initialized join index wrapper: ");

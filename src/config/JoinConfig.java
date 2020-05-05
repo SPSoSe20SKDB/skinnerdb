@@ -42,9 +42,15 @@ public class JoinConfig {
 	 * Whether to regularly forget everything that was
 	 * learned about join orders so far. This is helpful
 	 * since the reward distribution keeps changing due
-	 * to table offsets etc. Also helps against 
+	 * to table offsets etc. Also helps against
 	 * non-uniform data which may cause (too) early
 	 * convergence to one specific join order.
 	 */
 	public static final boolean FORGET = true;
+
+	/**
+	 * Determines if the used Join operator is building
+	 * hash tables on th fly
+	 */
+	public static final boolean USE_RIPPLE = true;
 }

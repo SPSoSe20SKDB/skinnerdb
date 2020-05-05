@@ -1,20 +1,20 @@
 package joining.join;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import catalog.CatalogManager;
 import config.LoggingConfig;
 import expressions.ExpressionInfo;
 import expressions.compilation.EvaluatorType;
 import expressions.compilation.ExpressionCompiler;
 import expressions.compilation.KnaryBoolEval;
+import joining.progress.ProgressTracker;
 import joining.result.JoinResult;
 import net.sf.jsqlparser.expression.Expression;
 import preprocessing.Context;
 import query.QueryInfo;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * A multi-way join operator that executes joins in small
@@ -53,19 +53,24 @@ public abstract class MultiWayJoin {
      */
     public final JoinResult result;
     /**
+     * Avoids redundant evaluation work by tracking evaluation progress.
+     */
+    public ProgressTracker tracker;
+
+    /**
      * This constructor only serves for testing purposes.
      * It initializes most field to null pointers.
-     * 
-     * @param query			query to test
+     *
+     * @param query query to test
      * @throws Exception
      */
     public MultiWayJoin(QueryInfo query) throws Exception {
-    	this.query = query;
-    	this.nrJoined = query.nrJoined;
-    	this.preSummary = null;
-    	this.cardinalities = null;
-    	this.result = null;
-    	predToEval = null;
+        this.query = query;
+        this.nrJoined = query.nrJoined;
+        this.preSummary = null;
+        this.cardinalities = null;
+        this.result = null;
+        predToEval = null;
     }
     /**
      * Initializes join operator for given query

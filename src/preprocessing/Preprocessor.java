@@ -1,5 +1,6 @@
 package preprocessing;
 
+import config.JoinConfig;
 import config.LoggingConfig;
 import config.NamingConfig;
 import config.PreConfig;
@@ -122,14 +123,14 @@ public class Preprocessor {
 				String table = query.aliasToTable.get(alias);
 				preSummary.aliasToFiltered.put(alias, table);
 			}
-		});			
+		});
 		// Abort pre-processing if filtering error occurred
 		if (hadError) {
 			throw new Exception("Error in pre-processor.");
 		}
 		// Create missing indices for columns involved in equi-joins.
-		log("Creating indices ...");			
-		createJoinIndices(query, preSummary);
+		log("Creating indices ...");
+		if (!JoinConfig.USE_RIPPLE) createJoinIndices(query, preSummary);
 		// Measure processing time
 		PreStats.preMillis = System.currentTimeMillis() - startMillis;
 		return preSummary;

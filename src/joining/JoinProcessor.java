@@ -1,25 +1,25 @@
 package joining;
 
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
-
 import catalog.CatalogManager;
+import config.JoinConfig;
 import config.LoggingConfig;
 import config.NamingConfig;
-import config.JoinConfig;
+import joining.join.MultiWayJoin;
+import joining.join.NewJoin;
 import joining.join.OldJoin;
 import joining.result.ResultTuple;
-import joining.uct.ExplorationWeightPolicy;
 import joining.uct.SelectionPolicy;
 import joining.uct.UctNode;
 import operators.Materialize;
 import preprocessing.Context;
-import print.RelationPrinter;
 import query.ColumnRef;
 import query.QueryInfo;
 import statistics.JoinStats;
 import visualization.TreePlotter;
+
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Controls the join phase.
@@ -50,9 +50,9 @@ public class JoinProcessor {
         JoinStats.nrIndexEntries = 0;
         JoinStats.nrUniqueIndexLookups = 0;
         JoinStats.nrIterations = 0;
-        JoinStats.nrUctNodes = 0;
-        JoinStats.nrPlansTried = 0;
-        JoinStats.nrSamples = 0;
+		JoinStats.nrUctNodes = 0;
+		JoinStats.nrPlansTried = 0;
+		JoinStats.nrSamples = 0;
 		// Initialize logging for new query
 		nrLogEntries = 0;
 		// Initialize multi-way join operator
@@ -60,8 +60,14 @@ public class JoinProcessor {
 		DefaultJoin joinOp = new DefaultJoin(query, preSummary, 
 				LearningConfig.BUDGET_PER_EPISODE);
 		*/
-		OldJoin joinOp = new OldJoin(query, context, 
-				JoinConfig.BUDGET_PER_EPISODE);
+		MultiWayJoin joinOp;
+		if (JoinConfig.USE_RIPPLE) {
+			joinOp = new NewJoin(query, context,
+					JoinConfig.BUDGET_PER_EPISODE);
+		} else {
+			joinOp = new OldJoin(query, context,
+					JoinConfig.BUDGET_PER_EPISODE);
+		}
 		// Initialize UCT join order search tree
 		UctNode root = new UctNode(0, query, true, joinOp);
 		// Initialize counters and variables
@@ -69,9 +75,9 @@ public class JoinProcessor {
 		long roundCtr = 0;
 		// Initialize exploration weight
 		switch (JoinConfig.EXPLORATION_POLICY) {
-		case SCALE_DOWN:
-			JoinConfig.EXPLORATION_WEIGHT = Math.sqrt(2);
-			break;
+			case SCALE_DOWN:
+				JoinConfig.EXPLORATION_WEIGHT = Math.sqrt(2);
+				break;
 		case STATIC:
 		case REWARD_AVERAGE:
 			// Nothing to do
@@ -128,7 +134,7 @@ public class JoinProcessor {
 				break;
 			}
 			// Consider memory loss
-			if (JoinConfig.FORGET && roundCtr==nextForget) {
+			if (JoinConfig.FORGET && roundCtr == nextForget) {
 				root = new UctNode(roundCtr, query, true, joinOp);
 				nextForget *= 10;
 			}
@@ -138,8 +144,9 @@ public class JoinProcessor {
 			log("Table offsets:\t" + Arrays.toString(joinOp.tracker.tableOffset));
 			log("Table cardinalities:\t" + Arrays.toString(joinOp.cardinalities));
 			// Generate plots if activated
-			if (query.explain && plotCtr<query.plotAtMost && 
-					roundCtr % query.plotEvery==0) {
+			//if (query.explain && plotCtr<query.plotAtMost &&
+			//		roundCtr % query.plotEvery==0) {
+			if (true) {
 				String plotName = "ucttree" + plotCtr + ".pdf";
 				String plotPath = Paths.get(query.plotDir, plotName).toString();
 				TreePlotter.plotTree(root, plotPath);

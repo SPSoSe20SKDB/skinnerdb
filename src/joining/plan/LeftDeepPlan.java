@@ -1,14 +1,14 @@
 package joining.plan;
 
-import java.util.*;
-
 import catalog.CatalogManager;
 import catalog.info.ColumnInfo;
+import config.JoinConfig;
 import expressions.ExpressionInfo;
 import expressions.compilation.KnaryBoolEval;
 import joining.join.JoinDoubleWrapper;
 import joining.join.JoinIndexWrapper;
 import joining.join.JoinIntWrapper;
+import joining.join.JoinNoIndexWrapper;
 import net.sf.jsqlparser.expression.Expression;
 import preprocessing.Context;
 import query.ColumnRef;
@@ -16,6 +16,8 @@ import query.QueryInfo;
 import query.SQLexception;
 import statistics.JoinStats;
 import types.TypeUtil;
+
+import java.util.*;
 
 /**
  * Represents a left deep query plan, characterized
@@ -90,19 +92,24 @@ public class LeftDeepPlan {
 					ColumnRef firstQueryRef = joinCols.iterator().next();
 					ColumnRef firstDBref = preSummary.columnMapping.get(firstQueryRef);
 					ColumnInfo firstInfo = CatalogManager.getColumn(firstDBref);
-					switch (TypeUtil.toJavaType(firstInfo.type)) {
-					case INT:
-						joinIndices.get(joinCtr).add(new JoinIntWrapper(
-								query, preSummary, joinCols, order));
-						break;
-					case DOUBLE:
-						joinIndices.get(joinCtr).add(new JoinDoubleWrapper(
-								query, preSummary, joinCols, order));
-						break;
-					default:
-						throw new SQLexception("Error - no support for equality "
-								+ "join predicates between columns of type " +
-								firstInfo.type);
+
+					if (JoinConfig.USE_RIPPLE) {
+						joinIndices.get(joinCtr).add(new JoinNoIndexWrapper(query, preSummary, joinCols, order, TypeUtil.toJavaType(firstInfo.type)));
+					} else {
+						switch (TypeUtil.toJavaType(firstInfo.type)) {
+							case INT:
+								joinIndices.get(joinCtr).add(new JoinIntWrapper(
+										query, preSummary, joinCols, order));
+								break;
+							case DOUBLE:
+								joinIndices.get(joinCtr).add(new JoinDoubleWrapper(
+										query, preSummary, joinCols, order));
+								break;
+							default:
+								throw new SQLexception("Error - no support for equality "
+										+ "join predicates between columns of type " +
+										firstInfo.type);
+						}
 					}
 					equiPredsIter.remove();
 				}
