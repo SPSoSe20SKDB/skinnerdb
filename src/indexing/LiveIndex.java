@@ -15,4 +15,13 @@ public class LiveIndex extends Index {
 
         // TODO: Struktur für Hash-Tabelle ausdenken + setter und getter
     }
+
+    public void set(int Referenz){
+
+    }
+
+    public int get(){
+        return -1;
+    }
+
 }

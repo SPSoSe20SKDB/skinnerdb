@@ -39,9 +39,12 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         // TODO: Die nächste Zeile als "Zeilennummer" zurückgeben
         // Hier eine Zeile zufällig auswählen und hashen
         // dazu: Die Daten der Spalte befinden sich in this.nextData
+        // Spalte selbst ist als referenz gegeben aus int[]
         // Die zu füllende Hash-Tabelle ist in this.liveIndex
         // this.liveIndex ist vom Typ "LiveIndex extends Index". Die Funktionalität ist noch offen.
-        return -1;
+        int zufallsZahl = (int)(Math.random()*tupleIndices.length); //wertebereich geht bis zur länge des Arrays
+        this.liveIndex.set(tupleIndices[zufallsZahl]);
+        return zufallsZahl;
     }
 
     @Override
