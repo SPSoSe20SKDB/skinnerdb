@@ -44,7 +44,7 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         // this.liveIndex ist vom Typ "LiveIndex extends Index". Die Funktionalität ist noch offen.
         int zufallsZahl = (int)(Math.random()*tupleIndices.length); //wertebereich geht bis zur länge des Arrays
         this.liveIndex.set(tupleIndices[zufallsZahl]);
-        return zufallsZahl;
+        return zufallsZahl; // zeilennummer = zufallszahl
     }
 
     @Override
