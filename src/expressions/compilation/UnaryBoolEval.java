@@ -16,5 +16,5 @@ public interface UnaryBoolEval {
 	 * @param tupleIdx	row index for evaluation
 	 * @return			-1 for false, 1 for true, 0 for null
 	 */
-	public byte evaluate(int tupleIdx);
+	byte evaluate(int tupleIdx);
 }

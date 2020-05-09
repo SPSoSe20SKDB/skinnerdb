@@ -194,5 +194,5 @@ public interface SkinnerDeprVisitor {
 
     void visit(DateTimeLiteralExpression literal) throws SQLexception;
 
-    public void visit(NotExpression aThis) throws SQLexception;
+    void visit(NotExpression aThis) throws SQLexception;
 }

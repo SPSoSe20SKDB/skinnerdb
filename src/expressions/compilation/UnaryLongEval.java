@@ -17,6 +17,6 @@ public interface UnaryLongEval {
 	 * @param result	store result at position zero
 	 * @return			true iff result is not null
 	 */
-	public boolean evaluate(int tupleIdx, long[] result);
+	boolean evaluate(int tupleIdx, long[] result);
 }
 

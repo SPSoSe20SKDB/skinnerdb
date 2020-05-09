@@ -17,5 +17,5 @@ public interface UnaryIntEval {
 	 * @param result	store result at position zero
 	 * @return			true iff result is not null
 	 */
-	public boolean evaluate(int tupleIdx, int[] result);
+	boolean evaluate(int tupleIdx, int[] result);
 }

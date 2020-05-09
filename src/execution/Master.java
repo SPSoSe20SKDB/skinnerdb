@@ -80,7 +80,7 @@ public class Master {
 			JoinProcessor.process(subQueryInfo, context);
 			// Determine result table name and properties
 			boolean lastSubQuery = subQueryCtr==nrSubQueries-1;
-			boolean tempResult = lastSubQuery?finalTempResult:true;
+			boolean tempResult = !lastSubQuery || finalTempResult;
 			String resultRel = subQuery.getIntoTables().get(0).getName();
 			// Aggregation, grouping, and sorting if required
 			PostProcessor.process(subQueryInfo, context, 

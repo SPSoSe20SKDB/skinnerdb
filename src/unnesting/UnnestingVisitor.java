@@ -151,7 +151,7 @@ public class UnnestingVisitor extends CopyVisitor implements SelectVisitor {
 				// Associate unnested sub-query with name
 				PlainSelect plainSelect = (PlainSelect)selectBody;
 				plainSelect.setIntoTables(Arrays.asList(
-						new Table[] {table}));
+						table));
 				// Recursively unnest sub-query
 				selectBody.accept(this);
 				// Update scope and column mapping
@@ -162,7 +162,7 @@ public class UnnestingVisitor extends CopyVisitor implements SelectVisitor {
 				}
 				aliasToCols.put(alias, newCols);
 				// Return table that will contain sub-query result
-				return (FromItem)table;
+				return table;
 			} else {
 				// (This case raises an exception before)
 				return fromItem;
@@ -548,7 +548,7 @@ public class UnnestingVisitor extends CopyVisitor implements SelectVisitor {
 				// Rewrite sub-query and add to query list
 				Table resultTable = new Table(alias);
 				plainSelect.setIntoTables(Arrays.asList(
-						new Table[] {resultTable}));
+						resultTable));
 				plainSelect.accept(this);
 				// Replace nested sub-query by table reference
 				List<String> subqueryCols = subqueryFields.pop();

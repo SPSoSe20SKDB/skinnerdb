@@ -977,7 +977,7 @@ public class ExpressionCompiler extends SkinnerVisitor {
 				evaluationVisitor.visitInsn(Opcodes.LMUL);
 				break;
 			case DOUBLE:
-				evaluationVisitor.visitLdcInsn((double)1.0);
+				evaluationVisitor.visitLdcInsn(1.0);
 				evaluationVisitor.visitInsn(Opcodes.DMUL);
 				break;
 			default:
@@ -1651,7 +1651,7 @@ public class ExpressionCompiler extends SkinnerVisitor {
 			JavaType jResultType = TypeUtil.toJavaType(resultType);
 			switch (jResultType) {
 			case INT:
-				evaluationVisitor.visitLdcInsn((int)0);
+				evaluationVisitor.visitLdcInsn(0);
 				break;
 			case LONG:
 				evaluationVisitor.visitLdcInsn((long)0);

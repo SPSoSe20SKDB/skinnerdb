@@ -44,4 +44,26 @@ s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
 3550.06	Supplier#000000416	IRAQ	8415	Manufacturer#2	F,9zQapGlzjmqRhVTj1DR	21-245-879-3004	ic orbits according to the furiously f	
 3086.13	Supplier#000000088	IRAQ	5087	Manufacturer#2	yOshY8wwzMgS	21-191-938-9469	furiously special excuses aff	
 3086.13	Supplier#000000088	IRAQ	7573	Manufacturer#1	yOshY8wwzMgS	21-191-938-9469	furiously special excuses aff	
-3065.22
+3065.22	Supplier#000000445	SAUDI ARABIA	3444	Manufacturer#4	WqzJKhnLnF05It4 5TDkGkUwVYszIko	30-686-270-2150	r the stealthy theodolites. bold, unusual attainmen	
+2613.77	Supplier#000000279	JORDAN	10498	Manufacturer#4	aVGVO0XNwTEkFwH0OhaQMJC7un0EizPpq	23-617-962-7353	accounts. quickly special packages nag at the unusual requests-- special d	
+2613.77	Supplier#000000279	JORDAN	19278	Manufacturer#5	aVGVO0XNwTEkFwH0OhaQMJC7un0EizPpq	23-617-962-7353	accounts. quickly special packages nag at the unusual requests-- special d	
+2555.98	Supplier#000000660	SAUDI ARABIA	2903	Manufacturer#1	AmvX 3nxd9r EOYZErE6PvBtFx 	30-126-295-9200	longside of the requests. fluffily bold 	
+2555.98	Supplier#000000660	SAUDI ARABIA	15864	Manufacturer#3	AmvX 3nxd9r EOYZErE6PvBtFx 	30-126-295-9200	longside of the requests. fluffily bold 	
+2257.13	Supplier#000000442	IRAQ	9441	Manufacturer#5	PJSCHXMAsqyRr5aPD9lp4tUl1B1WytbosVY8EdNZ	21-463-951-7051	es wake. accounts sleep slyly. slyly ironic platelets haggle. slyly	
+2233.53	Supplier#000000401	IRAN	1647	Manufacturer#1	9 zStaJ sD	20-586-179-6994	ages. dolphins integrate blithely final waters. carefully unusual accounts are fluf	
+2138.97	Supplier#000000262	SAUDI ARABIA	19454	Manufacturer#4	 3kCm2eN3Jra2UzvWWBm,P04b	30-952-865-8647	 ironic escapades. furiously even ideas affix blithely. silent accounts thrash beneath the	
+1962.02	Supplier#000000375	IRAQ	2870	Manufacturer#5	3CIBgjwAjB A1uxkiJNjc 7pI9AKhvnr1BHV9	21-250-668-2735	ully regular pinto beans acros	
+1882.05	Supplier#000000113	IRAQ	5112	Manufacturer#3	5 YOpqbaHs7dR gG4EmXrI7XtA7DcnRMsWPU1z2D	21-211-117-1937	blithely regular courts wake quickly even pl	
+1586.5	Supplier#000000626	JORDAN	9625	Manufacturer#3	uaYN3Mg6sVtD	23-672-133-9305	ic deposits above the blit	
+1523.14	Supplier#000000252	IRAQ	16719	Manufacturer#2	xcaKgadrug	21-860-636-2585	tain slyly fluffily bold ideas. furiously ironic ideas nag furiously slyly even requests.	
+1367.9	Supplier#000000568	IRAN	2811	Manufacturer#4	z70Hj8qVi8jQu	20-162-593-6831	furiously fluffy instructions about the regular 	
+1278.74	Supplier#000000932	IRAN	8415	Manufacturer#2	2Ke5SDwuwZ1y7H2QROIfgQ1d7	20-315-146-6687	counts wake carefully across the pendi	
+1235.72	Supplier#000000929	SAUDI ARABIA	15928	Manufacturer#4	XYQyy9rraHvHMCBQcoGnAvfw0iGG4jOCMENI	30-190-675-2042	ully according to the doggedly even theodolites. f	
+1180.93	Supplier#000000596	EGYPT	3595	Manufacturer#3	caTnKVKTsCHNEVi1xVPD	14-761-106-2656	its sleep. carefully unusual somas use furiously above the	
+1180.93	Supplier#000000596	EGYPT	11334	Manufacturer#3	caTnKVKTsCHNEVi1xVPD	14-761-106-2656	its sleep. carefully unusual somas use furiously above the	
+827.21	Supplier#000000788	SAUDI ARABIA	6019	Manufacturer#5	jL QLbG475Uszs4 2RxBp4oR	30-377-394-1108	bold requests along the quickly special dependencies use outside the	
+631.86	Supplier#000000659	SAUDI ARABIA	14394	Manufacturer#5	jjVP5XCtV9jbvUnkoeFUTrgB,ke	30-917-437-7814	r, ironic requests. carefully ruthless theodolites across the bravely bold deposits cajole car	
+453.28	Supplier#000000699	EGYPT	13172	Manufacturer#2	CplgysgQzKm7KRFKOJe	14-247-404-4838	sts. express accounts boost. silent platelets boost fl	
+326.36	Supplier#000000159	EGYPT	10378	Manufacturer#4	xftQu5vkiD6BF	14-606-224-3002	 blithely quickly ironic platel	
+-905.27	Supplier#000000343	EGYPT	5087	Manufacturer#2	LTRj tcLNq34je60R7LkZtNrEwmry00DIXguSxMS	14-617-526-7362	ckages sleep among the slyly express excuses. special, regular pinto beans are carefully: express d	
+----------------------------------------------------------------------------------------------------------------------------

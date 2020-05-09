@@ -16,5 +16,5 @@ public interface KnaryBoolEval {
 	 * @param tupleIndices	vector of tuple indices
 	 * @return				1 if true, 0 for NULL, -1 for false
 	 */
-	public byte evaluate(int[] tupleIndices);
+	byte evaluate(int[] tupleIndices);
 }

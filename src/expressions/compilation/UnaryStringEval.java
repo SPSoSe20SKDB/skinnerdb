@@ -17,5 +17,5 @@ public interface UnaryStringEval {
 	 * @param result	store result at position zero
 	 * @return			true iff result is not null
 	 */
-	public boolean evaluate(int tupleIdx, String[] result);
+	boolean evaluate(int tupleIdx, String[] result);
 }

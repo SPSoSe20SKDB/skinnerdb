@@ -212,6 +212,8 @@ public class NewJoin extends MultiWayJoin {
         }
 
         // TODO: hier muss für jeden Join eine erste Zeile gehashed werden, damit wir vorerst den hiesigen Prozess ohne Veränderungen nutzen können. (Für Tupel [0, 0, ...])
+        // für tupelindices = indices von tabellenzeilen, eine zufällige zeile vorhanden, damit bedingung nicht fehlschägt
+        // von jeder tabelle Rohdaten, ohne match, beginn mit zufälliger zahl
 
         int remainingBudget = budget;
         // Number of completed tuples added
@@ -253,7 +255,7 @@ public class NewJoin extends MultiWayJoin {
                         }
                         nextTable = plan.joinOrder.order[joinIndex];
                         nextCardinality = cardinalities[nextTable];
-                        tupleIndices[nextTable] += 1;
+                        tupleIndices[nextTable] += 1; // eine Zeile weiter gehen, noch nciht gehashed
                     }
                 } else {
                     // No complete result row -> complete further

@@ -530,7 +530,7 @@ public class PostProcessor {
 		// Store full result in preliminary table if limit specified 
 		boolean hasLimit = query.limit!=-1;
 		String preLimitResult = hasLimit?NamingConfig.PRE_LIMIT_TBL:resultRel;
-		boolean preLimitTemp = hasLimit?true:tempResult;
+		boolean preLimitTemp = hasLimit || tempResult;
 		// Distinguish type of query
 		switch (query.aggregationType) {
 		case NONE:

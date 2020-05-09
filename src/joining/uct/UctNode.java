@@ -157,8 +157,7 @@ public class UctNode {
         joinedTables.add(joinedTable);
         unjoinedTables = new ArrayList<Integer>();
         unjoinedTables.addAll(parent.unjoinedTables);
-        int indexToRemove = unjoinedTables.indexOf(joinedTable);
-        unjoinedTables.remove(indexToRemove);
+		unjoinedTables.remove((Integer) joinedTable);
         nextTable = new int[nrActions];
         for (int actionCtr = 0; actionCtr < nrActions; ++actionCtr) {
             accumulatedReward[actionCtr] = 0;
