@@ -144,9 +144,8 @@ public class JoinProcessor {
 			log("Table offsets:\t" + Arrays.toString(joinOp.tracker.tableOffset));
 			log("Table cardinalities:\t" + Arrays.toString(joinOp.cardinalities));
 			// Generate plots if activated
-			//if (query.explain && plotCtr<query.plotAtMost &&
-			//		roundCtr % query.plotEvery==0) {
-			if (true) {
+			if (query.explain && plotCtr < query.plotAtMost &&
+					roundCtr % query.plotEvery == 0) {
 				String plotName = "ucttree" + plotCtr + ".pdf";
 				String plotPath = Paths.get(query.plotDir, plotName).toString();
 				TreePlotter.plotTree(root, plotPath);

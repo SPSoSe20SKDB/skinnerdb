@@ -39,6 +39,10 @@ public abstract class JoinIndexWrapper {
 	 */
 	final ColumnData nextData;
 	/**
+	 * Reference to next column ref.
+	 */
+	final ColumnRef nextRef;
+	/**
 	 * Index on join column to use.
 	 */
 	Index nextIndex;
@@ -75,6 +79,7 @@ public abstract class JoinIndexWrapper {
 		// Get index for next table
 		ColumnRef nextQueryCol = pos1 < pos2 ? col2 : col1;
 		ColumnRef nextDbCol = preSummary.columnMapping.get(nextQueryCol);
+		nextRef = nextDbCol;
 		nextIndex = BufferManager.colToIndex.get(nextDbCol);
 		nextData = BufferManager.colToData.get(nextDbCol);
 		// Generate logging output

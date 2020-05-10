@@ -81,7 +81,7 @@ public class BenchMarkSkinner {
             System.out.println(entry.getValue().toString());
             long startMillis = System.currentTimeMillis();
             QueryInfo query = new QueryInfo(entry.getValue(),
-                    true, -1, -1, "D:\\Softwareprojekt\\plots");
+                    false, -1, -1, "D:\\Softwareprojekt\\plots");
             Context preSummary = Preprocessor.process(query);
             long preMillis = System.currentTimeMillis() - startMillis;
             JoinProcessor.process(query, preSummary);

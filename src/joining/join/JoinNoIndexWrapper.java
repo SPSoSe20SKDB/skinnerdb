@@ -1,5 +1,8 @@
 package joining.join;
 
+import buffer.BufferManager;
+import data.DoubleData;
+import data.IntData;
 import indexing.LiveIndex;
 import preprocessing.Context;
 import query.ColumnRef;
@@ -28,8 +31,11 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         super(queryInfo, preSummary, joinCols, order);
         type = javaType;
 
-        nextIndex = new LiveIndex(nextData.cardinality);
-        nextIndex.data = nextData;
+        if (nextIndex == null) {
+            nextIndex = new LiveIndex(nextData.cardinality, javaType);
+            nextIndex.data = nextData;
+            BufferManager.colToIndex.put(nextRef, nextIndex);
+        }
 
         liveIndex = (LiveIndex) nextIndex;
     }
@@ -42,20 +48,29 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         // Spalte selbst ist als referenz gegeben aus int[]
         // Die zu füllende Hash-Tabelle ist in this.liveIndex
         // this.liveIndex ist vom Typ "LiveIndex extends Index". Die Funktionalität ist noch offen.
-        int zufallsZahl = (int)(Math.random()*tupleIndices.length); //wertebereich geht bis zur länge des Arrays
-        this.liveIndex.set(tupleIndices[zufallsZahl]);
-        int daten = this.nextData[zufallsZahl];
-        if(//n schon gehashed):
-        //nix
-        //retun ? zufallszahl anpassen
-        else{
-            //hashen
+
+        int n = liveIndex.getRandomNotHashed();
+        if (n >= liveIndex.cardinality) return n;
+        Object data = null;
+        switch (nextData.getClass().getSimpleName()) {
+            case "IntData":
+                data = ((IntData) nextData).data[n];
+                break;
+            case "DoubleData":
+                data = ((DoubleData) nextData).data[n];
+                break;
         }
-        return zufallsZahl; // zeilennummer = zufallszahl
+        liveIndex.addHash(n, data);
+
+        return n; // zeilennummer = zufallszahl
     }
 
     @Override
     public int nrIndexed(int[] tupleIndices) {
         return liveIndex.nrIndexed;
+    }
+
+    public void resetRandomList() {
+        liveIndex.resetRandomList();
     }
 }

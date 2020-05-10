@@ -18,7 +18,6 @@ s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
 7122.9	Supplier#000000846	SAUDI ARABIA	14053	Manufacturer#4	C1Cs3zHlceRMxlaPIBprCC76x4LKVdH3QhZ	30-283-261-2020	thely special deposits was furious	
 7082.37	Supplier#000000344	IRAQ	10343	Manufacturer#2	F mMVT6PuRj5S	21-808-924-2361	inal courts nod fluffily for the care	
 6705.44	Supplier#000000190	IRAN	8415	Manufacturer#2	qpXGL8oM1 wzQd	20-995-359-7606	regular deposits haggle across the final, si	
-6578.65	Supplier#000000111	EGYPT	610	Manufacturer#1	uv56H9j8cNa4qnflVSYbLNN	14-256-573-2660	ing theodolites are about the slowly pending	
 6469.78	Supplier#000000256	IRAQ	15990	Manufacturer#5	ma15idU1PzO7itP67W1Rd	21-370-961-2170	sly pending deposits haggle	
 6387.89	Supplier#000000176	IRAN	5920	Manufacturer#3	OLVnGuOx8m6NfApzODj4 JP01JJIm,qI53BChmgQ	20-970-245-2712	s according to the carefully expr	
 6223.17	Supplier#000000427	SAUDI ARABIA	5661	Manufacturer#4	 Hnd2bzQ95, Adq bg7BQAbFVmRV9rQ,jY98	30-315-782-5162	he regular requests haggle blithely about the forges	
@@ -42,7 +41,6 @@ s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
 4068.14	Supplier#000000267	IRAN	2510	Manufacturer#4	,E9NoXeK5qOwVRoutS,X8Gr	20-501-962-2896	riously close asymptotes are. carefully bold p	
 3698.31	Supplier#000000379	SAUDI ARABIA	10378	Manufacturer#4	jyGWzIJTAdI0Iko2o	30-202-917-6929	sleep? express packages are quietly around the slyly even ideas. express accoun	
 3550.06	Supplier#000000416	IRAQ	8415	Manufacturer#2	F,9zQapGlzjmqRhVTj1DR	21-245-879-3004	ic orbits according to the furiously f	
-3086.13	Supplier#000000088	IRAQ	5087	Manufacturer#2	yOshY8wwzMgS	21-191-938-9469	furiously special excuses aff	
 3086.13	Supplier#000000088	IRAQ	7573	Manufacturer#1	yOshY8wwzMgS	21-191-938-9469	furiously special excuses aff	
 3065.22	Supplier#000000445	SAUDI ARABIA	3444	Manufacturer#4	WqzJKhnLnF05It4 5TDkGkUwVYszIko	30-686-270-2150	r the stealthy theodolites. bold, unusual attainmen	
 2613.77	Supplier#000000279	JORDAN	10498	Manufacturer#4	aVGVO0XNwTEkFwH0OhaQMJC7un0EizPpq	23-617-962-7353	accounts. quickly special packages nag at the unusual requests-- special d	
@@ -65,5 +63,4 @@ s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
 631.86	Supplier#000000659	SAUDI ARABIA	14394	Manufacturer#5	jjVP5XCtV9jbvUnkoeFUTrgB,ke	30-917-437-7814	r, ironic requests. carefully ruthless theodolites across the bravely bold deposits cajole car	
 453.28	Supplier#000000699	EGYPT	13172	Manufacturer#2	CplgysgQzKm7KRFKOJe	14-247-404-4838	sts. express accounts boost. silent platelets boost fl	
 326.36	Supplier#000000159	EGYPT	10378	Manufacturer#4	xftQu5vkiD6BF	14-606-224-3002	 blithely quickly ironic platel	
--905.27	Supplier#000000343	EGYPT	5087	Manufacturer#2	LTRj tcLNq34je60R7LkZtNrEwmry00DIXguSxMS	14-617-526-7362	ckages sleep among the slyly express excuses. special, regular pinto beans are carefully: express d	
 ----------------------------------------------------------------------------------------------------------------------------

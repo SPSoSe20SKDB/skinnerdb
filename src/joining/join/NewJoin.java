@@ -1,5 +1,6 @@
 package joining.join;
 
+import config.JoinConfig;
 import config.LoggingConfig;
 import config.PreConfig;
 import expressions.ExpressionInfo;
@@ -214,11 +215,11 @@ public class NewJoin extends MultiWayJoin {
         // (done) TODO: hier muss für jeden Join eine erste Zeile gehashed werden, damit wir vorerst den hiesigen Prozess ohne Veränderungen nutzen können. (Für Tupel [0, 0, ...])
         // für tupelindices = indices von tabellenzeilen, eine zufällige zeile vorhanden, damit bedingung nicht fehlschägt
         // von jeder tabelle Rohdaten, ohne match, beginn mit zufälliger zahl
-        for(List<JoinIndexWrapper> i : joinIndices) {
-            for( JoinIndexWrapper j : i) {
-                tupleIndices[j.nextTable] = ((JoinNoIndexWrapper)j.nextIndex[]);
-            }
-        }
+        //for(List<JoinIndexWrapper> i : joinIndices) {
+        //    for( JoinIndexWrapper j : i) {
+        //        tupleIndices[j.nextTable] = j.nextIndex(tupleIndices);
+        //    }
+        //}
 
         int remainingBudget = budget;
         // Number of completed tuples added
@@ -235,8 +236,8 @@ public class NewJoin extends MultiWayJoin {
             int nextCardinality = cardinalities[nextTable];
             //System.out.println("index:"+joinIndex+", next table:"+nextTable);
             // Integrate table offset
-            tupleIndices[nextTable] = Math.max(
-                    offsets[nextTable], tupleIndices[nextTable]);
+            //tupleIndices[nextTable] = Math.max(
+            //        offsets[nextTable], tupleIndices[nextTable]);
             // Evaluate all applicable predicates on joined tuples
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
 
@@ -253,14 +254,15 @@ public class NewJoin extends MultiWayJoin {
                             joinIndices.get(joinIndex), nextTable, tupleIndices);
                     // Have reached end of current table? -> we backtrack.
                     while (tupleIndices[nextTable] >= nextCardinality) {
-                        tupleIndices[nextTable] = 0;
+                        tupleIndices[nextTable] = resetTableHashRandomnes(joinIndices.get(joinIndex), nextTable, tupleIndices);
                         --joinIndex;
                         if (joinIndex < 0) {
                             break;
                         }
                         nextTable = plan.joinOrder.order[joinIndex];
                         nextCardinality = cardinalities[nextTable];
-                        tupleIndices[nextTable] += 1; // eine Zeile weiter gehen, noch nciht gehashed
+                        tupleIndices[nextTable] = proposeNext(
+                                joinIndices.get(joinIndex), nextTable, tupleIndices);
                     }
                 } else {
                     // No complete result row -> complete further
@@ -274,14 +276,15 @@ public class NewJoin extends MultiWayJoin {
                         joinIndices.get(joinIndex), nextTable, tupleIndices);
                 // Have reached end of current table? -> we backtrack.
                 while (tupleIndices[nextTable] >= nextCardinality) {
-                    tupleIndices[nextTable] = 0;
+                    tupleIndices[nextTable] = resetTableHashRandomnes(joinIndices.get(joinIndex), nextTable, tupleIndices);
                     --joinIndex;
                     if (joinIndex < 0) {
                         break;
                     }
                     nextTable = plan.joinOrder.order[joinIndex];
                     nextCardinality = cardinalities[nextTable];
-                    tupleIndices[nextTable] += 1;
+                    tupleIndices[nextTable] = proposeNext(
+                            joinIndices.get(joinIndex), nextTable, tupleIndices);
                 }
             }
             --remainingBudget;
@@ -301,6 +304,24 @@ public class NewJoin extends MultiWayJoin {
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             state.tupleIndices[tableCtr] = tupleIndices[tableCtr];
         }
+    }
+
+    private int resetTableHashRandomnes(List<JoinIndexWrapper> indexWrappers, int nextTable, int[] tupleIndices) {
+        if (indexWrappers.isEmpty()) {
+            return 0;
+        }
+        int max = -1;
+        for (JoinIndexWrapper wrapper : indexWrappers) {
+            if (JoinConfig.USE_RIPPLE) ((JoinNoIndexWrapper) wrapper).resetRandomList();
+            int nextRaw = wrapper.nextIndex(tupleIndices);
+            int next = nextRaw < 0 ? cardinalities[nextTable] : nextRaw;
+            max = Math.max(max, next);
+        }
+        if (max < 0) {
+            System.out.println(Arrays.toString(tupleIndices));
+            System.out.println(indexWrappers.toString());
+        }
+        return max;
     }
 
     @Override
