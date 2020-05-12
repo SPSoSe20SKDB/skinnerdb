@@ -11,10 +11,11 @@ import types.JavaType;
 
 import java.util.Set;
 
-public class JoinNoIndexWrapper extends JoinIndexWrapper {
+public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
     private final JavaType type;
 
-    private LiveIndex liveIndex;
+    public static int nextIndexCalled = 0;
+    private LiveIndex<T> liveIndex;
 
     /**
      * Initialize index wrapper for
@@ -32,7 +33,7 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         type = javaType;
 
         if (nextIndex == null) {
-            nextIndex = new LiveIndex(nextData.cardinality, javaType);
+            nextIndex = new LiveIndex<T>(nextData.cardinality, javaType);
             nextIndex.data = nextData;
             BufferManager.colToIndex.put(nextRef, nextIndex);
         }
@@ -49,7 +50,9 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
         // Die zu füllende Hash-Tabelle ist in this.liveIndex
         // this.liveIndex ist vom Typ "LiveIndex extends Index". Die Funktionalität ist noch offen.
 
-        int n = liveIndex.getRandomNotHashed();
+        nextIndexCalled++;
+
+        int n = liveIndex.getNextNotHashed();
         if (n >= liveIndex.cardinality) return n;
         Object data = null;
         switch (nextData.getClass().getSimpleName()) {
@@ -60,17 +63,14 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
                 data = ((DoubleData) nextData).data[n];
                 break;
         }
-        liveIndex.addHash(n, data);
+        liveIndex.addHash(n, (T) data);
 
-        return n; // zeilennummer = zufallszahl
+        return n;
+
     }
 
     @Override
     public int nrIndexed(int[] tupleIndices) {
         return liveIndex.nrIndexed;
-    }
-
-    public void resetRandomList() {
-        liveIndex.resetRandomList();
     }
 }

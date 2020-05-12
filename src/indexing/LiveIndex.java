@@ -3,17 +3,16 @@ package indexing;
 import types.JavaType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LiveIndex extends Index {
-    public ConcurrentHashMap<Integer, Object> index;
+public class LiveIndex<T> extends Index {
+    public int nrIndexed = 0;
+    private ConcurrentHashMap<T, ArrayList<Integer>> index;
+    private ConcurrentHashMap<T, Integer> indexPositions;
+    private boolean isReady = false;
 
-    public int nrIndexed;
-
-    public JavaType type;
-
-    private ArrayList<Integer> linesSet;
-    private int listIndex;
+    private int listIndex = 0;
 
     /**
      * Initialize for given cardinality of indexed table.
@@ -23,38 +22,65 @@ public class LiveIndex extends Index {
      */
     public LiveIndex(int cardinality, JavaType javaType) {
         super(cardinality);
-        nrIndexed = 0;
-        type = javaType;
 
         index = new ConcurrentHashMap<>();
-
-        linesSet = new ArrayList<>();
-        for (int i = 0; i < cardinality; i++) {
-            linesSet.add(i);
-        }
-        resetRandomList();
+        indexPositions = new ConcurrentHashMap<>();
     }
 
-    public int getRandomNotHashed() {
+    /**
+     * Nächsten Tabelleninces (Iterator-mäßig) zurückgeben
+     *
+     * @return Zeilennummer innerhalb der Spalte
+     */
+    public int getNextNotHashed() {
         if (listIndex == cardinality) {
-            resetRandomList();
+            listIndex = 0;
+            isReady = true;
             return cardinality;
         }
-        int n = linesSet.get(listIndex);
         listIndex++;
-        return n;
+        return listIndex;
     }
 
-    public void addHash(int n, Object data) {
+    /**
+     * Datum mit Zeilennummer dem Hash hinzufügen
+     *
+     * @param n    Zeilennummer
+     * @param data Datum
+     */
+    public void addHash(int n, T data) {
         if (nrIndexed == cardinality) return;
         if (data != null) {
-            index.put(n, data);
+            if (!index.containsKey(data)) {
+                index.put(data, new ArrayList<>(Collections.singletonList(n)));
+                indexPositions.put(data, 0);
+            } else {
+                index.get(data).add(n);
+            }
             nrIndexed++;
         }
     }
 
-    public void resetRandomList() {
-        listIndex = 0;
-        //Collections.shuffle(linesSet);
+    /**
+     * Hash-Tabellen-Abfrage zu Datum
+     *
+     * @param data Datenobjekt in erster Tabelle, zu dem die nächste verfügbaren Zeile in zweiter Tabelle zurückgegeben wird.
+     * @return eilenindice zu dem gegebenen Datum ()
+     */
+    public int getNextHashLine(T data) {
+        int newIndex = indexPositions.getOrDefault(data, -1);
+        if (newIndex < 0) return newIndex;
+        ArrayList<Integer> dataPositions = index.get(data);
+        indexPositions.put(data, (newIndex + 1) % dataPositions.size());
+        return dataPositions.get(newIndex);
+    }
+
+    /**
+     * Ist Hash-Tabelle fertig gebaut
+     *
+     * @return Hash-Tabelle fertig
+     */
+    public boolean isReady() {
+        return isReady;
     }
 }
