@@ -42,7 +42,7 @@ public class JoinNoIndexWrapper extends JoinIndexWrapper {
 
     @Override
     public int nextIndex(int[] tupleIndices) {
-        // TODO: Die nächste Zeile als "Zeilennummer" zurückgeben
+        // TODO: Hashtabelle aufbauen und danach dann auf den fertigen hashtabellen arbeiten
         // Hier eine Zeile zufällig auswählen und hashen
         // dazu: Die Daten der Spalte befinden sich in this.nextData
         // Spalte selbst ist als referenz gegeben aus int[]
