@@ -1,8 +1,0 @@
-----------------------------------------------------------------------------------------------------------------------------
-s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
-----------------------------------------------------------------------------------------------------------------------------
-8396.49	Supplier#000000436	SAUDI ARABIA	4435	Manufacturer#4	MV8Xu3m,93IINpPlE	30-253-200-6170	. carefully regular request	
-2613.77	Supplier#000000279	JORDAN	10498	Manufacturer#4	aVGVO0XNwTEkFwH0OhaQMJC7un0EizPpq	23-617-962-7353	accounts. quickly special packages nag at the unusual requests-- special d	
-1278.74	Supplier#000000932	IRAN	8415	Manufacturer#2	2Ke5SDwuwZ1y7H2QROIfgQ1d7	20-315-146-6687	counts wake carefully across the pendi	
-1235.72	Supplier#000000929	SAUDI ARABIA	15928	Manufacturer#4	XYQyy9rraHvHMCBQcoGnAvfw0iGG4jOCMENI	30-190-675-2042	ully according to the doggedly even theodolites. f	
-----------------------------------------------------------------------------------------------------------------------------

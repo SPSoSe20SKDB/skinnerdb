@@ -1,6 +1,7 @@
 package joining.join;
 
 import buffer.BufferManager;
+import data.ColumnData;
 import data.DoubleData;
 import data.IntData;
 import indexing.LiveIndex;
@@ -44,28 +45,50 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
     @Override
     public int nextIndex(int[] tupleIndices) {
         // TODO: Hashtabelle aufbauen und danach dann auf den fertigen hashtabellen arbeiten
-        // Hier eine Zeile zufällig auswählen und hashen
+        // Hier eine Zeile "zufällig" auswählen und hashen
         // dazu: Die Daten der Spalte befinden sich in this.nextData
-        // Spalte selbst ist als referenz gegeben aus int[]
         // Die zu füllende Hash-Tabelle ist in this.liveIndex
-        // this.liveIndex ist vom Typ "LiveIndex extends Index". Die Funktionalität ist noch offen.
+        // this.liveIndex ist vom Typ "LiveIndex extends Index"
 
         nextIndexCalled++;
 
-        int n = liveIndex.getNextNotHashed();
-        if (n >= liveIndex.cardinality) return n;
-        Object data = null;
-        switch (nextData.getClass().getSimpleName()) {
-            case "IntData":
-                data = ((IntData) nextData).data[n];
-                break;
-            case "DoubleData":
-                data = ((DoubleData) nextData).data[n];
-                break;
-        }
-        liveIndex.addHash(n, (T) data);
+        //hashtabelle bereits fertig vorhanden
+        if(liveIndex.isReady() == true){
+            Object data = null;
+            int tab1_zeile = tupleIndices[priorTable];
+            //System.out.println(tab1_zeile);
 
-        return n;
+            //aktuelle daten finden
+            switch (priorData.getClass().getSimpleName()) {
+                case "IntData":
+                    data = ((IntData) priorData).data[tab1_zeile];
+                    break;
+                case "DoubleData":
+                    data = ((DoubleData) priorData).data[tab1_zeile];
+                    break;
+            }
+            //daten in tab2 finden
+            int ausgabe = liveIndex.getNextHashLine((T)data);
+            return ausgabe;
+        }
+
+        // hashtabelle ist nicht fertig aufgebaut
+        else{
+            int n = liveIndex.getNextNotHashed();
+            if (n >= liveIndex.cardinality) return n;
+            Object data = null;
+            switch (nextData.getClass().getSimpleName()) {
+                case "IntData":
+                    data = ((IntData) nextData).data[n];
+                    break;
+                case "DoubleData":
+                    data = ((DoubleData) nextData).data[n];
+                    break;
+            }
+            liveIndex.addHash(n, (T) data);
+
+            return n;
+        }
 
     }
 
