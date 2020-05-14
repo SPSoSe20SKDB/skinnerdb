@@ -69,7 +69,15 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
             }
             //daten in tab2 finden
             int ausgabe = liveIndex.getNextHashLine((T)data);
-            return ausgabe;
+            //abfrage verhindert endlosschleife
+
+            if(tupleIndices[nextTable]<ausgabe){
+                tupleIndices[nextTable] = ausgabe;
+                return ausgabe;
+            }
+            else{
+                return liveIndex.cardinality+10;
+            }
         }
 
         // hashtabelle ist nicht fertig aufgebaut
