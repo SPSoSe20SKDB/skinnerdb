@@ -76,7 +76,7 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
                 return ausgabe;
             }
             else{
-                return liveIndex.cardinality;
+                return liveIndex.cardinality+10;
             }
         }
 
