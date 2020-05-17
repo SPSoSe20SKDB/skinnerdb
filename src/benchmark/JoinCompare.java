@@ -1,56 +1,59 @@
 package benchmark;
 
-/*
 import buffer.BufferManager;
-import catalog.CatalogManager;
-import catalog.info.TableInfo;
-import config.GeneralConfig;
-import config.NamingConfig;
-import diskio.PathUtil;
-import expressions.ExpressionInfo;
-import joining.JoinProcessor;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import postprocessing.PostProcessor;
-import preprocessing.Context;
-import preprocessing.Preprocessor;
-import print.RelationPrinter;
-import query.ColumnRef;
-import query.QueryInfo;
-import statistics.JoinStats;
-
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Map.Entry;
-*/
-
 import config.JoinConfig;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
 
-/**
- * TODO: compare old vs new join
- */
 public class JoinCompare {
 
     public static void main(String[] args) throws Exception {
-        Runtime rt = Runtime.getRuntime();
-
-        // Check for command line parameters
         if (args.length != 2) {
             System.out.println("Specify Skinner DB dir, " + "query directory");
             return;
         }
 
-        //Get required information
-        //String SkinnerDbDir = args[0];
-        //String queryDir = args[1];
+        Path resultsPath = new File("skinnerResults.txt").toPath();
 
         JoinConfig.USE_RIPPLE = true;
         BenchMarkSkinner.main(args);
+        String[] result1 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
+        BufferManager.colToIndex.clear();
 
         JoinConfig.USE_RIPPLE = false;
         BenchMarkSkinner.main(args);
+        String[] result2 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
+        boolean arePermutations = arePermutations(result1, result2);
+
+        if (arePermutations) {
+            System.out.println("All Same");
+        } else {
+            System.out.println("Not Same");
+        }
+    }
+
+    static boolean arePermutations(String[] arr1, String[] arr2) {
+        HashMap<String, Integer> hM = new HashMap<>();
+        for (int i = 0; i < arr1.length; i++) {
+            String x = arr1[i];
+            if (hM.get(x) == null)
+                hM.put(x, 1);
+            else {
+                int k = hM.get(x);
+                hM.put(x, k + 1);
+            }
+        }
+        for (int i = 0; i < arr2.length; i++) {
+            String x = arr2[i];
+            if (hM.get(x) == null || hM.get(x) == 0) return false;
+            int k = hM.get(x);
+            hM.put(x, k - 1);
+        }
+        return true;
     }
 }
