@@ -1,7 +1,6 @@
 package joining.join;
 
 import buffer.BufferManager;
-import data.ColumnData;
 import data.DoubleData;
 import data.IntData;
 import indexing.LiveIndex;
@@ -13,9 +12,8 @@ import types.JavaType;
 import java.util.Set;
 
 public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
-    private final JavaType type;
-
     public static int nextIndexCalled = 0;
+    private final JavaType type;
     private LiveIndex<T> liveIndex;
 
     /**
@@ -44,44 +42,30 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
 
     @Override
     public int nextIndex(int[] tupleIndices) {
-        // TODO: Hashtabelle aufbauen und danach dann auf den fertigen hashtabellen arbeiten
-        // Hier eine Zeile "zufällig" auswählen und hashen
-        // dazu: Die Daten der Spalte befinden sich in this.nextData
-        // Die zu füllende Hash-Tabelle ist in this.liveIndex
-        // this.liveIndex ist vom Typ "LiveIndex extends Index"
-
         nextIndexCalled++;
 
-        //hashtabelle bereits fertig vorhanden
-        if(liveIndex.isReady() == true){
-            Object data = null;
-            int tab1_zeile = tupleIndices[priorTable];
-            //System.out.println(tab1_zeile);
+        // Hashtabelle bereits fertig vorhanden
+        if (liveIndex.isReady()) {
+            Object priorVal = null;
+            int priorTuple = tupleIndices[priorTable];
 
-            //aktuelle daten finden
+            // Aktuelles Datum aus erster Tabelle laden
             switch (priorData.getClass().getSimpleName()) {
                 case "IntData":
-                    data = ((IntData) priorData).data[tab1_zeile];
+                    priorVal = ((IntData) priorData).data[priorTuple];
                     break;
                 case "DoubleData":
-                    data = ((DoubleData) priorData).data[tab1_zeile];
+                    priorVal = ((DoubleData) priorData).data[priorTuple];
                     break;
             }
-            //daten in tab2 finden
-            int ausgabe = liveIndex.getNextHashLine((T)data);
-            //abfrage verhindert endlosschleife
+            // Datum in zweiter Tabelle finden
+            int nextTuple = liveIndex.getNextHashLine((T) priorVal);
 
-            if(tupleIndices[nextTable]<ausgabe){
-                tupleIndices[nextTable] = ausgabe;
-                return ausgabe;
-            }
-            else{
-                return liveIndex.cardinality+10;
-            }
+            // Abfrage verhindert Endlosschleife
+            return tupleIndices[nextTable] < nextTuple ? nextTuple : liveIndex.cardinality;
         }
-
-        // hashtabelle ist nicht fertig aufgebaut
-        else{
+        // Hashtabelle ist nicht fertig aufgebaut
+        else {
             int n = liveIndex.getNextNotHashed();
             if (n >= liveIndex.cardinality) return n;
             Object data = null;
