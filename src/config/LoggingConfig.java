@@ -19,7 +19,7 @@ public class LoggingConfig {
 	/**
 	 * Whether to log expressions after each transformation stage.
 	 */
-	public final static boolean EXPRESSIONS_VERBOSE = true;
+	public final static boolean EXPRESSIONS_VERBOSE = false;
 	/**
 	 * Whether to generate logging output while compiling expressions.
 	 */
@@ -35,7 +35,7 @@ public class LoggingConfig {
 	/**
 	 * Whether to generate verbose output about pre-processing.
 	 */
-	public final static boolean PREPROCESSING_VERBOSE = true;
+	public final static boolean PREPROCESSING_VERBOSE = false;
 	/**
 	 * Whether to generate verbose output during index creation.
 	 */

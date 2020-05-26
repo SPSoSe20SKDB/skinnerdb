@@ -33,7 +33,7 @@ public class BenchMarkSkinner {
         // Check for command line parameters
         if (args.length != 1 && args.length != 2) {
             System.out.println("Specify Skinner DB dir, "
-                                + "query directory");
+                    + "query directory");
             return;
         }
 
@@ -41,29 +41,31 @@ public class BenchMarkSkinner {
         String SkinnerDbDir = args[0];
         String queryDir = args[1];
 
-        //Initialize database
-        PathUtil.initSchemaPaths(SkinnerDbDir);
-        CatalogManager.loadDB(PathUtil.schemaPath);
-        PathUtil.initDataPaths(CatalogManager.currentDB);
-        System.out.println("Loading data ...");
-        GeneralConfig.inMemory = true;
+        if (!GeneralConfig.isComparing) {
+            //Initialize database
+            PathUtil.initSchemaPaths(SkinnerDbDir);
+            CatalogManager.loadDB(PathUtil.schemaPath);
+            PathUtil.initDataPaths(CatalogManager.currentDB);
+            System.out.println("Loading data ...");
+            GeneralConfig.inMemory = true;
 
-        long beforeLoadingMillis = System.currentTimeMillis();
-        long memoryBeforeLoading = rt.totalMemory() - rt.freeMemory();
-        BufferManager.loadDB();
-        long loadMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeLoading;
-        long loadingMillis = System.currentTimeMillis() - beforeLoadingMillis;
-        System.out.println("Used Memory for Loading: " + ((double) loadMemory) / 1024 / 1024 + " MB");
-        System.out.println("Millis for Loading: " + loadingMillis + " ms");
-        System.out.println("Data loaded.");
+            long beforeLoadingMillis = System.currentTimeMillis();
+            long memoryBeforeLoading = rt.totalMemory() - rt.freeMemory();
+            BufferManager.loadDB();
+            long loadMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeLoading;
+            long loadingMillis = System.currentTimeMillis() - beforeLoadingMillis;
+            System.out.println("Used Memory for Loading: " + ((double) loadMemory) / 1024 / 1024 + " MB");
+            System.out.println("Millis for Loading: " + loadingMillis + " ms");
+            System.out.println("Data loaded.");
+        }
 
         long beforeIndexingMillis = System.currentTimeMillis();
         long memoryBeforeIndexing = rt.totalMemory() - rt.freeMemory();
         //Indexer.indexAll(StartupConfig.INDEX_CRITERIA);
         long hashMemory = rt.totalMemory() - rt.freeMemory() - memoryBeforeIndexing;
         long indexingMillis = System.currentTimeMillis() - beforeIndexingMillis;
-        System.out.println("Used Memory for Hashing: " + ((double) hashMemory) / 1024 / 1024 + " MB");
-        System.out.println("Millis for Hashing: " + indexingMillis + " ms");
+        //System.out.println("Used Memory for Hashing: " + ((double) hashMemory) / 1024 / 1024 + " MB");
+        //System.out.println("Millis for Hashing: " + indexingMillis + " ms");
 
         // Read all queries from files
         Map<String, PlainSelect> nameToQuery =
@@ -76,9 +78,9 @@ public class BenchMarkSkinner {
 
         //Measuring pre-processing time for each query
         BenchUtil.writeBenchHeader(benchOut);
-        for (Entry<String, PlainSelect> entry : nameToQuery.entrySet()){
-            System.out.println(entry.getKey());
-            System.out.println(entry.getValue().toString());
+        for (Entry<String, PlainSelect> entry : nameToQuery.entrySet()) {
+            //System.out.println(entry.getKey());
+            //System.out.println(entry.getValue().toString());
             long startMillis = System.currentTimeMillis();
             QueryInfo query = new QueryInfo(entry.getValue(),
                     false, -1, -1, "D:\\Softwareprojekt\\plots");

@@ -14,7 +14,7 @@ import java.util.Set;
 public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
     public static int nextIndexCalled = 0;
     private final JavaType type;
-    private LiveIndex<T> liveIndex;
+    private final LiveIndex<T> liveIndex;
 
     /**
      * Initialize index wrapper for
@@ -87,5 +87,9 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
     @Override
     public int nrIndexed(int[] tupleIndices) {
         return liveIndex.nrIndexed;
+    }
+
+    public void resetCurrent() {
+        liveIndex.resetCurrent();
     }
 }

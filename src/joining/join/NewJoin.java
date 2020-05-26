@@ -217,23 +217,23 @@ public class NewJoin extends MultiWayJoin {
         // Execute join order until budget depleted or all input finished -
         // at each iteration start, tuple indices contain next tuple
         // combination to look at.
-        while (remainingBudget > 0 && joinIndex >= 0) {
+        boolean inGroupProcessing = false;
+        while ((remainingBudget > 0 || inGroupProcessing) && joinIndex >= 0) {
             ++JoinStats.nrIterations;
-            //log("Offsets:\t" + Arrays.toString(offsets));
-            //log("Indices:\t" + Arrays.toString(tupleIndices));
             // Get next table in join order
             int nextTable = plan.joinOrder.order[joinIndex];
             int nextCardinality = cardinalities[nextTable];
-            //System.out.println("index:"+joinIndex+", next table:"+nextTable);
             // Integrate table offset
-            //tupleIndices[nextTable] = Math.max(
-            //        offsets[nextTable], tupleIndices[nextTable]);
+            tupleIndices[nextTable] = Math.max(
+                    offsets[nextTable], tupleIndices[nextTable]);
             // Evaluate all applicable predicates on joined tuples
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
 
             if ((PreConfig.PRE_FILTER || unaryPred == null ||
                     unaryPred.evaluate(tupleIndices) > 0) &&
                     evaluateAll(applicablePreds.get(joinIndex), tupleIndices)) {
+                inGroupProcessing = true;
+
                 ++JoinStats.nrTuples;
                 // Do we have a complete result row?
                 if (joinIndex == plan.joinOrder.order.length - 1) {
@@ -256,9 +256,10 @@ public class NewJoin extends MultiWayJoin {
                 } else {
                     // No complete result row -> complete further
                     joinIndex++;
-                    //System.out.println("Current Join Index2:"+ joinIndex);
                 }
             } else {
+                inGroupProcessing = false;
+
                 // At least one of applicable predicates evaluates to false -
                 // try next tuple in same table.
                 tupleIndices[nextTable] = proposeNext(
@@ -277,6 +278,7 @@ public class NewJoin extends MultiWayJoin {
             }
             --remainingBudget;
         }
+
         // Store tuple index deltas used to calculate reward
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             int start = Math.max(offsets[tableCtr], state.tupleIndices[tableCtr]);
@@ -291,6 +293,12 @@ public class NewJoin extends MultiWayJoin {
         state.lastIndex = joinIndex;
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             state.tupleIndices[tableCtr] = tupleIndices[tableCtr];
+        }
+    }
+
+    private void clearCurrentTableIndex(List<JoinIndexWrapper> l) {
+        for (JoinIndexWrapper w : l) {
+            ((JoinNoIndexWrapper) w).resetCurrent();
         }
     }
 

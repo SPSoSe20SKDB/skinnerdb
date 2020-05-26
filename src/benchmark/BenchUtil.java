@@ -1,12 +1,5 @@
 package benchmark;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.util.Collections;
-import java.util.Map;
-import java.util.TreeMap;
-
 import catalog.CatalogManager;
 import config.NamingConfig;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
@@ -17,11 +10,17 @@ import statistics.JoinStats;
 import statistics.PostStats;
 import statistics.PreStats;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Several auxiliary methods for benchmarking SkinnerDB.
- * 
- * @author immanueltrummer
  *
+ * @author immanueltrummer
  */
 public class BenchUtil {
 	/**
@@ -42,11 +41,11 @@ public class BenchUtil {
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".sql")) {
 				String sql = new String(Files.readAllBytes(file.toPath()));
-				System.out.println(sql);
+				//System.out.println(sql);
 				Statement sqlStatement = CCJSqlParserUtil.parse(sql);
-				Select select = (Select)sqlStatement;
-				PlainSelect plainSelect = (PlainSelect)select.getSelectBody();
-				nameToQuery.put(file.getName(), plainSelect);				
+				Select select = (Select) sqlStatement;
+				PlainSelect plainSelect = (PlainSelect) select.getSelectBody();
+				nameToQuery.put(file.getName(), plainSelect);
 			}
 		}
 		return nameToQuery;

@@ -111,16 +111,17 @@ public class JoinProcessor {
 		while (!joinOp.isFinished()) {
 			++roundCtr;
 			double reward = root.sample(roundCtr, joinOrder, policy);
+			System.out.println(Arrays.toString(joinOrder));
 			// Count reward except for final sample
 			if (!joinOp.isFinished()) {
 				accReward += reward;
 				maxReward = Math.max(reward, maxReward);
 			}
 			switch (JoinConfig.EXPLORATION_POLICY) {
-			case REWARD_AVERAGE:
-				double avgReward = accReward/roundCtr;
-				JoinConfig.EXPLORATION_WEIGHT = avgReward;
-				log("Avg. reward: " + avgReward);
+				case REWARD_AVERAGE:
+					double avgReward = accReward / roundCtr;
+					JoinConfig.EXPLORATION_WEIGHT = avgReward;
+					log("Avg. reward: " + avgReward);
 				break;
 			case SCALE_DOWN:
 				if (roundCtr == nextScaleDown) {
