@@ -12,9 +12,10 @@ import types.JavaType;
 import java.util.Set;
 
 public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
-    public static int nextIndexCalled = 0;
     private final JavaType type;
     private final LiveIndex<T> liveIndex;
+    private final String priorDataType;
+    private final String nextDataType;
 
     /**
      * Initialize index wrapper for
@@ -38,50 +39,60 @@ public class JoinNoIndexWrapper<T> extends JoinIndexWrapper {
         }
 
         liveIndex = (LiveIndex) nextIndex;
+
+        priorDataType = priorData.getClass().getSimpleName();
+        nextDataType = nextData.getClass().getSimpleName();
     }
 
     @Override
     public int nextIndex(int[] tupleIndices) {
-        nextIndexCalled++;
-
-        // Hashtabelle bereits fertig vorhanden
-        if (liveIndex.isReady()) {
-            Object priorVal = null;
-            int priorTuple = tupleIndices[priorTable];
-
-            // Aktuelles Datum aus erster Tabelle laden
-            switch (priorData.getClass().getSimpleName()) {
-                case "IntData":
-                    priorVal = ((IntData) priorData).data[priorTuple];
-                    break;
-                case "DoubleData":
-                    priorVal = ((DoubleData) priorData).data[priorTuple];
-                    break;
-            }
-            // Datum in zweiter Tabelle finden
-            int nextTuple = liveIndex.getNextHashLine((T) priorVal);
-
-            // Abfrage verhindert Endlosschleife
-            return tupleIndices[nextTable] < nextTuple ? nextTuple : liveIndex.cardinality;
+        Object priorVal = null;
+        T priorValT;
+        int priorTuple = tupleIndices[priorTable];
+        // Aktuelles Datum aus erster Tabelle laden
+        switch (priorDataType) {
+            case "IntData":
+                priorVal = ((IntData) priorData).data[priorTuple];
+                break;
+            case "DoubleData":
+                priorVal = ((DoubleData) priorData).data[priorTuple];
+                break;
         }
-        // Hashtabelle ist nicht fertig aufgebaut
-        else {
-            int n = liveIndex.getNextNotHashed();
-            if (n >= liveIndex.cardinality) return n;
-            Object data = null;
-            switch (nextData.getClass().getSimpleName()) {
-                case "IntData":
-                    data = ((IntData) nextData).data[n];
-                    break;
-                case "DoubleData":
-                    data = ((DoubleData) nextData).data[n];
-                    break;
+        priorValT = (T) priorVal;
+
+        int nextTuple = liveIndex.getNextHashLine(priorValT);
+
+        if (nextTuple >= liveIndex.cardinality || tupleIndices[nextTable] > nextTuple) {
+            if (liveIndex.isReady()) {
+                return liveIndex.cardinality;
+            } else {
+                Object nextVal = null;
+                T nextValT;
+                do {
+                    nextTuple = liveIndex.getNextNotHashed();
+                    if (nextTuple >= liveIndex.cardinality) {
+                        return nextIndex(tupleIndices);
+                    }
+                    switch (nextDataType) {
+                        case "IntData":
+                            nextVal = ((IntData) nextData).data[nextTuple];
+                            break;
+                        case "DoubleData":
+                            nextVal = ((DoubleData) nextData).data[nextTuple];
+                            break;
+                    }
+                    nextValT = (T) nextVal;
+                    liveIndex.addHash(nextTuple, nextValT);
+                } while (!priorValT.equals(nextValT));
+                if (priorValT.equals(nextValT)) {
+                    return nextTuple;
+                } else {
+                    return liveIndex.cardinality;
+                }
             }
-            liveIndex.addHash(n, (T) data);
-
-            return n;
+        } else {
+            return nextTuple;
         }
-
     }
 
     @Override

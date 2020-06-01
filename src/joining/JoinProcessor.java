@@ -23,7 +23,7 @@ import java.util.Collection;
 
 /**
  * Controls the join phase.
- * 
+ *
  * @author immanueltrummer
  *
  */
@@ -33,23 +33,24 @@ public class JoinProcessor {
 	 * generated for the current query.
 	 */
 	static int nrLogEntries = 0;
+
 	/**
 	 * Executes the join phase and stores result in relation.
 	 * Also updates mapping from query column references to
 	 * database columns.
-	 * 
-	 * @param query		query to process
-	 * @param context	query execution context
+	 *
+	 * @param query   query to process
+	 * @param context query execution context
 	 */
-	public static void process(QueryInfo query, 
-			Context context) throws Exception {
-        // Initialize statistics
+	public static void process(QueryInfo query,
+							   Context context) throws Exception {
+		// Initialize statistics
 		long startMillis = System.currentTimeMillis();
-        JoinStats.nrTuples = 0;
-        JoinStats.nrIndexLookups = 0;
-        JoinStats.nrIndexEntries = 0;
-        JoinStats.nrUniqueIndexLookups = 0;
-        JoinStats.nrIterations = 0;
+		JoinStats.nrTuples = 0;
+		JoinStats.nrIndexLookups = 0;
+		JoinStats.nrIndexEntries = 0;
+		JoinStats.nrUniqueIndexLookups = 0;
+		JoinStats.nrIterations = 0;
 		JoinStats.nrUctNodes = 0;
 		JoinStats.nrPlansTried = 0;
 		JoinStats.nrSamples = 0;
@@ -85,11 +86,11 @@ public class JoinProcessor {
 		case ADAPT_TO_SAMPLE:
 			final int nrSamples = 1000;
 			double[] rewardSample = new double[nrSamples];
-			for (int i=0; i<nrSamples; ++i) {
+			for (int i=0; i< nrSamples; ++i) {
 				++roundCtr;
 				rewardSample[i] = root.sample(
-						roundCtr, joinOrder, 
-						SelectionPolicy.RANDOM);				
+						roundCtr, joinOrder,
+						SelectionPolicy.RANDOM);
 			}
 			Arrays.sort(rewardSample);
 			double median = rewardSample[nrSamples/2];
@@ -111,7 +112,8 @@ public class JoinProcessor {
 		while (!joinOp.isFinished()) {
 			++roundCtr;
 			double reward = root.sample(roundCtr, joinOrder, policy);
-			System.out.println(Arrays.toString(joinOrder));
+			System.out.print(Arrays.toString(joinOrder) + ": ");
+			System.out.println(joinOp.result.getTuples().size());
 			// Count reward except for final sample
 			if (!joinOp.isFinished()) {
 				accReward += reward;
@@ -169,16 +171,16 @@ public class JoinProcessor {
 				JoinStats.totalWork += 1;
 			} else {
 				JoinStats.totalWork += Math.max(
-						joinOp.tracker.tableOffset[tableCtr],0)/
-						(double)joinOp.cardinalities[tableCtr];				
+						joinOp.tracker.tableOffset[tableCtr], 0) /
+						(double) joinOp.cardinalities[tableCtr];
 			}
 		}
 		// Output final stats if join logging enabled
 		if (LoggingConfig.MAX_JOIN_LOGS > 0) {
-			System.out.println("Exploration weight:\t" + 
+			System.out.println("Exploration weight:\t" +
 					JoinConfig.EXPLORATION_WEIGHT);
 			System.out.println("Nr. rounds:\t" + roundCtr);
-			System.out.println("Table offsets:\t" + 
+			System.out.println("Table offsets:\t" +
 					Arrays.toString(joinOp.tracker.tableOffset));
 			System.out.println("Table cards.:\t" +
 					Arrays.toString(joinOp.cardinalities));
@@ -188,8 +190,8 @@ public class JoinProcessor {
 		int nrTuples = tuples.size();
 		log("Materializing join result with " + nrTuples + " tuples ...");
 		String targetRelName = NamingConfig.JOINED_NAME;
-		Materialize.execute(tuples, query.aliasToIndex, 
-				query.colsForPostProcessing, 
+		Materialize.execute(tuples, query.aliasToIndex,
+				query.colsForPostProcessing,
 				context.columnMapping, targetRelName);
 		// Update processing context
 		context.columnMapping.clear();
@@ -204,11 +206,12 @@ public class JoinProcessor {
 		// Measure execution time for join phase
 		JoinStats.joinMillis = System.currentTimeMillis() - startMillis;
 	}
+
 	/**
 	 * Print out log entry if the maximal number of log
 	 * entries has not been reached yet.
-	 * 
-	 * @param logEntry	log entry to print
+	 *
+	 * @param logEntry    log entry to print
 	 */
 	static void log(String logEntry) {
 		if (nrLogEntries < LoggingConfig.MAX_JOIN_LOGS) {

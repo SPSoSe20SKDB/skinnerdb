@@ -41,8 +41,9 @@ public class LiveIndex<T> extends Index {
             isReady = true;
             return cardinality;
         }
+        int returnIndex = listIndex;
         listIndex++;
-        return listIndex;
+        return returnIndex;
     }
 
     /**
@@ -71,7 +72,7 @@ public class LiveIndex<T> extends Index {
      * @return Zeilenindice zu dem gegebenen Datum ()
      */
     public int getNextHashLine(T data) {
-        if (data != lastRequest) indexPosition = 0;
+        if (!data.equals(lastRequest)) indexPosition = 0;
         ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
         lastRequest = data;
         if (dataPositions == null) {

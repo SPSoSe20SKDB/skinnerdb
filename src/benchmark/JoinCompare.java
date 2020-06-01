@@ -16,13 +16,18 @@ public class JoinCompare {
     public static int yes = 0;
     public static int no = 0;
     public static int sum = 0;
+    public static final boolean printDebug = false;
+    public static Runtime rt = Runtime.getRuntime();
+    public static double timeDiff = 0;
+    public static double ramDiff = 0;
 
     public static void main(String[] args) throws Exception {
         GeneralConfig.isComparing = true;
 
-        long rippleTime = 0;
-        long noRippleTime = 0;
-
+        long rippleTime;
+        long noRippleTime;
+        long rippleRam;
+        long noRippleRam;
 
         if (args.length != 2) {
             System.out.println("Specify Skinner DB dir, " + "query directory");
@@ -40,21 +45,27 @@ public class JoinCompare {
         Path resultsPath = new File("skinnerResults.txt").toPath();
 
         BufferManager.colToIndex.clear();
+        rt.gc();
 
         PreConfig.CONSIDER_INDICES = true;
         JoinConfig.USE_RIPPLE = false;
         noRippleTime = System.currentTimeMillis();
+        noRippleRam = rt.totalMemory() - rt.freeMemory();
         BenchMarkSkinner.main(args);
         noRippleTime = System.currentTimeMillis() - noRippleTime;
+        noRippleRam = rt.totalMemory() - rt.freeMemory() - noRippleRam;
         String[] result1 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
         BufferManager.colToIndex.clear();
+        rt.gc();
 
         PreConfig.CONSIDER_INDICES = false;
         JoinConfig.USE_RIPPLE = true;
         rippleTime = System.currentTimeMillis();
+        rippleRam = rt.totalMemory() - rt.freeMemory();
         BenchMarkSkinner.main(args);
         rippleTime = System.currentTimeMillis() - rippleTime;
+        rippleRam = rt.totalMemory() - rt.freeMemory() - rippleRam;
         String[] result2 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
         boolean arePermutations = arePermutations(result1, result2);
@@ -63,17 +74,27 @@ public class JoinCompare {
 
         if (arePermutations) {
             yes++;
-            System.out.println("All Same: " + yes + " times / " + sum);
+            if (printDebug) System.out.println("All Same: " + yes + " times / " + sum);
         } else {
             no++;
-            System.out.println("Not Same: " + no + " times / " + sum);
+            if (printDebug) System.out.println("Not Same: " + no + " times / " + sum);
         }
-        System.out.println("Time-Diff: " + (rippleTime - noRippleTime) + " ms; " + ((rippleTime - noRippleTime) * 100.0d / noRippleTime) + " %");
+        if (printDebug)
+            System.out.println("Time-Diff: " + (rippleTime - noRippleTime) + " ms; " + ((rippleTime - noRippleTime) * 100.0d / noRippleTime) + " %; NoR: " + noRippleTime + " ms; R: " + rippleTime + " ms");
+        if (printDebug)
+            System.out.println("Ram-Diff: " + (rippleRam - noRippleRam) / 1024.0d / 1024 + " MB; " + ((rippleRam - noRippleRam) * 100.0d / noRippleRam) + " %; NoR: " + noRippleRam / 1024.0d / 1024 + " MB; R: " + rippleRam / 1024.0d / 1024 + " MB");
+
+        timeDiff = (timeDiff * (sum - 1) + ((rippleTime - noRippleTime) * 100.0d / noRippleTime)) / sum;
+        ramDiff = (ramDiff * (sum - 1) + ((rippleRam - noRippleRam) * 100.0d / noRippleRam)) / sum;
+
+        System.out.println("-----------------------------------");
 
         if (sum == 100) {
             System.out.println("End");
             System.out.println("Yes: " + yes);
             System.out.println("No: " + no);
+            if (printDebug) System.out.println("TimeDiffSum: " + timeDiff);
+            if (printDebug) System.out.println("RamDiffSum: " + ramDiff);
             return;
         }
         main(args);

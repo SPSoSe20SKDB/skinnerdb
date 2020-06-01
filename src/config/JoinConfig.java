@@ -52,5 +52,5 @@ public class JoinConfig {
 	 * Determines if the used Join operator is building
 	 * hash tables on th fly
 	 */
-	public static boolean USE_RIPPLE = true;
+	public static boolean USE_RIPPLE = false;
 }
