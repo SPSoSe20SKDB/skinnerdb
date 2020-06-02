@@ -1,6 +1,5 @@
 package preprocessing;
 
-import benchmark.JoinCompare;
 import config.JoinConfig;
 import config.LoggingConfig;
 import config.NamingConfig;
@@ -16,7 +15,6 @@ import operators.Materialize;
 import print.RelationPrinter;
 import query.ColumnRef;
 import query.QueryInfo;
-import statistics.PostStats;
 import statistics.PreStats;
 
 import java.util.ArrayList;
@@ -299,21 +297,21 @@ public class Preprocessor {
 
 		// Measure time and store as statistics
 		PreStats.preMillis = System.currentTimeMillis() - startMillis;
-		System.out.println("Duration of pre-processing: " + PreStats.preMillis + "ms");
+		//System.out.println("Duration of pre-processing: " + PreStats.preMillis + "ms");
 		// Measure storage allocation after pre-processing
-		System.out.println("Storage allocation after Pre: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
+		//System.out.println("Storage allocation after Pre: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 
 	}
 
 
 	/**
 	 * Output logging message if pre-processing logging activated.
-	 * 
-	 * @param toLog		text to display if logging is activated
+	 *
+	 * @param toLog text to display if logging is activated
 	 */
 	static void log(String toLog) {
 		if (LoggingConfig.PREPROCESSING_VERBOSE) {
 			System.out.println(toLog);
 		}
 	}
-	}
+}
