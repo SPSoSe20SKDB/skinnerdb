@@ -1,9 +1,5 @@
 package postprocessing;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import benchmark.JoinCompare;
 import buffer.BufferManager;
 import catalog.CatalogManager;
 import catalog.info.ColumnInfo;
@@ -15,17 +11,15 @@ import data.IntData;
 import expressions.ExpressionInfo;
 import expressions.aggregates.AggInfo;
 import net.sf.jsqlparser.schema.Column;
-import operators.GroupBy;
-import operators.MapRows;
-import operators.Materialize;
-import operators.MinMaxAggregate;
-import operators.OrderBy;
-import operators.SumAggregate;
+import operators.*;
 import preprocessing.Context;
 import print.RelationPrinter;
 import query.ColumnRef;
 import query.QueryInfo;
 import statistics.PostStats;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Uses the result of the join phase as input and
@@ -559,16 +553,16 @@ public class PostProcessor {
 			for (int rowCtr=0; rowCtr<limit; ++rowCtr) {
 				limitRows.add(rowCtr);
 			}
-			operators.Materialize.execute(preLimitResult, 
-					preLimitInfo.columnNames, limitRows, null, 
+			operators.Materialize.execute(preLimitResult,
+					preLimitInfo.columnNames, limitRows, null,
 					resultRel, true);
 		}
 		// Update result table statistics
 		CatalogManager.updateStats(resultRel);
 		// Measure time and store as statistics
 		PostStats.postMillis = System.currentTimeMillis() - startMillis;
-		System.out.println("Duration of post-processing: " + PostStats.postMillis + "ms");
+		//System.out.println("Duration of post-processing: " + PostStats.postMillis + "ms");
 		// Measure storage allocation after post-processing
-		System.out.println("Storage allocation after Post: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
+		//System.out.println("Storage allocation after Post: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 	}
 }

@@ -7,13 +7,22 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveIndex<T> extends Index {
-    public int nrIndexed = 0;
+    /**
+     * Structure for index hash table
+     */
     private final ConcurrentHashMap<T, ArrayList<Integer>> index;
-    private int indexPosition;
-    //private ConcurrentHashMap<T, Integer> indexPositions;
-    private T lastRequest;
+    /**
+     * indexed lines
+     */
+    public int nrIndexed = 0;
+    /**
+     * state if index is fully build
+     */
     private boolean isReady = false;
 
+    /**
+     * current row when indexing
+     */
     private int listIndex = 0;
 
     /**
@@ -26,8 +35,6 @@ public class LiveIndex<T> extends Index {
         super(cardinality);
 
         index = new ConcurrentHashMap<>();
-        indexPosition = 0;
-        //indexPositions = new ConcurrentHashMap<>();
     }
 
     /**
@@ -57,7 +64,6 @@ public class LiveIndex<T> extends Index {
         if (data != null) {
             if (!index.containsKey(data)) {
                 index.put(data, new ArrayList<>(Collections.singletonList(n)));
-                //indexPositions.put(data, 0);
             } else {
                 index.get(data).add(n);
             }
@@ -71,28 +77,23 @@ public class LiveIndex<T> extends Index {
      * @param data Datenobjekt in erster Tabelle, zu dem die nächste verfügbaren Zeile in zweiter Tabelle zurückgegeben wird.
      * @return Zeilenindice zu dem gegebenen Datum ()
      */
-    public int getNextHashLine(T data) {
-        if (!data.equals(lastRequest)) indexPosition = 0;
+    public int getNextHashLine(T data, int prevTuple) {
+        // get position of date in table
         ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
-        lastRequest = data;
+
+        // if positions equals null, data is not present in table
         if (dataPositions == null) {
-            indexPosition = 0;
             return cardinality;
         }
-        if (indexPosition >= dataPositions.size()) {
-            indexPosition = 0;
-            return cardinality;
+
+        // loop through index, find next index
+        for (int i = 0; i < dataPositions.size(); i++) {
+            int nextTuple = dataPositions.get(i);
+            if (nextTuple > prevTuple) return nextTuple;
         }
-        int returnLine = dataPositions.get(indexPosition);
-        indexPosition++;
-        return returnLine;
-        /*int newIndex = indexPositions.getOrDefault(data, -1);
-        if(newIndex >= 0 && data != lastRequest) newIndex = 0;
-        lastRequest = data;
-        if (newIndex < 0) return newIndex;
-        ArrayList<Integer> dataPositions = index.get(data);
-        indexPositions.put(data, (newIndex + 1) % dataPositions.size());
-        return dataPositions.get(newIndex);*/
+
+        // if not found return cardinality
+        return cardinality;
     }
 
     /**
@@ -102,9 +103,5 @@ public class LiveIndex<T> extends Index {
      */
     public boolean isReady() {
         return isReady;
-    }
-
-    public void resetCurrent() {
-        indexPosition = 0;
     }
 }

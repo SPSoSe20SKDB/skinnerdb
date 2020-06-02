@@ -1,6 +1,5 @@
 package joining;
 
-import benchmark.JoinCompare;
 import catalog.CatalogManager;
 import config.JoinConfig;
 import config.LoggingConfig;
@@ -16,7 +15,6 @@ import preprocessing.Context;
 import query.ColumnRef;
 import query.QueryInfo;
 import statistics.JoinStats;
-import statistics.PostStats;
 import visualization.TreePlotter;
 
 import java.nio.file.Paths;
@@ -209,9 +207,9 @@ public class JoinProcessor {
 		JoinStats.joinMillis = System.currentTimeMillis() - startMillis;
 
 		// print statistics
-		System.out.println("Duration of join phase: " + JoinStats.joinMillis + "ms");
+		//System.out.println("Duration of join phase: " + JoinStats.joinMillis + "ms");
 		// Measure storage allocation after joining
-		System.out.println("Storage allocation after joining: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
+		//System.out.println("Storage allocation after joining: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 
 	}
 

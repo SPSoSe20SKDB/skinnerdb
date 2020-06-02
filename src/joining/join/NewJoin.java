@@ -224,8 +224,8 @@ public class NewJoin extends MultiWayJoin {
             int nextTable = plan.joinOrder.order[joinIndex];
             int nextCardinality = cardinalities[nextTable];
             // Integrate table offset
-            //tupleIndices[nextTable] = Math.max(
-            //        offsets[nextTable], tupleIndices[nextTable]);
+            tupleIndices[nextTable] = Math.max(
+                    offsets[nextTable], tupleIndices[nextTable]);
             // Evaluate all applicable predicates on joined tuples
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
 
@@ -245,14 +245,12 @@ public class NewJoin extends MultiWayJoin {
                     // Have reached end of current table? -> we backtrack.
                     while (tupleIndices[nextTable] >= nextCardinality) {
                         tupleIndices[nextTable] = 0;
-                        clearCurrentTableIndex(joinIndices.get(joinIndex));
                         --joinIndex;
                         if (joinIndex < 0) {
                             break;
                         }
                         nextTable = plan.joinOrder.order[joinIndex];
                         nextCardinality = cardinalities[nextTable];
-                        //tupleIndices[nextTable] = proposeNext(joinIndices.get(joinIndex), nextTable, tupleIndices);
                         tupleIndices[nextTable] += 1;
                     }
                 } else {
@@ -269,7 +267,6 @@ public class NewJoin extends MultiWayJoin {
                 // Have reached end of current table? -> we backtrack.
                 while (tupleIndices[nextTable] >= nextCardinality) {
                     tupleIndices[nextTable] = 0;
-                    clearCurrentTableIndex(joinIndices.get(joinIndex));
                     --joinIndex;
                     if (joinIndex < 0) {
                         break;
@@ -297,12 +294,6 @@ public class NewJoin extends MultiWayJoin {
         state.lastIndex = joinIndex;
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             state.tupleIndices[tableCtr] = tupleIndices[tableCtr];
-        }
-    }
-
-    private void clearCurrentTableIndex(List<JoinIndexWrapper> l) {
-        for (JoinIndexWrapper w : l) {
-            ((JoinNoIndexWrapper) w).resetCurrent();
         }
     }
 

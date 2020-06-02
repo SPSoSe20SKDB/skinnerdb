@@ -1,2 +1,2 @@
 Query	Millis	PreMillis	PostMillis	Tuples	Iterations	Lookups	NrIndexEntries	nrUniqueLookups	NrUctNodes	NrPlans	JoinCard	NrSamples	AvgReward	MaxReward	TotalWork
-q02.sql	20	4	0	1953	5071	0	0	0	14	5	65	11	0.11816929380180903	0.4374803514610627	1.1227749999999999
+q02.sql	49	10	0	2476	6374	0	0	0	16	7	65	13	0.07167961502275984	0.28149901458213966	1.1276125000000001
