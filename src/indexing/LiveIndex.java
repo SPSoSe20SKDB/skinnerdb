@@ -2,7 +2,7 @@ package indexing;
 
 import types.JavaType;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +10,7 @@ public class LiveIndex<T> extends Index {
     /**
      * Structure for index hash table
      */
-    private final ConcurrentHashMap<T, ArrayList<Integer>> index;
+    private final ConcurrentHashMap<T, LinkedList<Integer>> index;
     /**
      * indexed lines
      */
@@ -63,9 +63,9 @@ public class LiveIndex<T> extends Index {
         if (nrIndexed == cardinality) return;
         if (data != null) {
             if (!index.containsKey(data)) {
-                index.put(data, new ArrayList<>(Collections.singletonList(n)));
+                index.put(data, new LinkedList<>(Collections.singletonList(n)));
             } else {
-                index.get(data).add(n);
+                index.get(data).addLast(n);
             }
             nrIndexed++;
         }
@@ -79,7 +79,7 @@ public class LiveIndex<T> extends Index {
      */
     public int getNextHashLine(T data, int prevTuple) {
         // get position of date in table
-        ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
+        LinkedList<Integer> dataPositions = index.getOrDefault(data, null);
 
         // if positions equals null, data is not present in table
         if (dataPositions == null) {

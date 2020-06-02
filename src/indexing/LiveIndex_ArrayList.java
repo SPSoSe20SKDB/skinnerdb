@@ -2,18 +2,27 @@ package indexing;
 
 import types.JavaType;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LiveIndex_LL<T> extends Index {
+public class LiveIndex_ArrayList<T> extends Index {
+    /**
+     * Structure for index hash table
+     */
+    private final ConcurrentHashMap<T, ArrayList<Integer>> index;
+    /**
+     * indexed lines
+     */
     public int nrIndexed = 0;
-    private final ConcurrentHashMap<T, LinkedList<Integer>> index;
-    private int indexPosition;
-    //private ConcurrentHashMap<T, Integer> indexPositions;
-    private T lastRequest;
+    /**
+     * state if index is fully build
+     */
     private boolean isReady = false;
 
+    /**
+     * current row when indexing
+     */
     private int listIndex = 0;
 
     /**
@@ -22,12 +31,10 @@ public class LiveIndex_LL<T> extends Index {
      * @param cardinality number of rows to index
      * @param javaType    type of Column
      */
-    public LiveIndex_LL(int cardinality, JavaType javaType) {
+    public LiveIndex_ArrayList(int cardinality, JavaType javaType) {
         super(cardinality);
 
         index = new ConcurrentHashMap<>();
-        indexPosition = 0;
-        //indexPositions = new ConcurrentHashMap<>();
     }
 
     /**
@@ -56,9 +63,9 @@ public class LiveIndex_LL<T> extends Index {
         if (nrIndexed == cardinality) return;
         if (data != null) {
             if (!index.containsKey(data)) {
-                index.put(data, new LinkedList<>(Collections.singletonList(n)));
+                index.put(data, new ArrayList<>(Collections.singletonList(n)));
             } else {
-                index.get(data).addLast(n);
+                index.get(data).add(n);
             }
             nrIndexed++;
         }
@@ -70,21 +77,23 @@ public class LiveIndex_LL<T> extends Index {
      * @param data Datenobjekt in erster Tabelle, zu dem die nächste verfügbaren Zeile in zweiter Tabelle zurückgegeben wird.
      * @return Zeilenindice zu dem gegebenen Datum ()
      */
-    public int getNextHashLine(T data) {
-        if (!data.equals(lastRequest)) indexPosition = 0;
-        LinkedList<Integer> dataPositions = index.getOrDefault(data, null);
-        lastRequest = data;
+    public int getNextHashLine(T data, int prevTuple) {
+        // get position of date in table
+        ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
+
+        // if positions equals null, data is not present in table
         if (dataPositions == null) {
-            indexPosition = 0;
             return cardinality;
         }
-        if (indexPosition >= dataPositions.size()) {
-            indexPosition = 0;
-            return cardinality;
+
+        // loop through index, find next index
+        for (int i = 0; i < dataPositions.size(); i++) {
+            int nextTuple = dataPositions.get(i);
+            if (nextTuple > prevTuple) return nextTuple;
         }
-        int returnLine = dataPositions.get(indexPosition);
-        indexPosition++;
-        return returnLine;
+
+        // if not found return cardinality
+        return cardinality;
     }
 
     /**
@@ -94,9 +103,5 @@ public class LiveIndex_LL<T> extends Index {
      */
     public boolean isReady() {
         return isReady;
-    }
-
-    public void resetCurrent() {
-        indexPosition = 0;
     }
 }
