@@ -2,13 +2,13 @@ package indexing;
 
 import types.JavaType;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LiveIndex_old<T> extends Index {
+public class LiveIndex_LL<T> extends Index {
     public int nrIndexed = 0;
-    private final ConcurrentHashMap<T, ArrayList<Integer>> index;
+    private final ConcurrentHashMap<T, LinkedList<Integer>> index;
     private int indexPosition;
     //private ConcurrentHashMap<T, Integer> indexPositions;
     private T lastRequest;
@@ -22,7 +22,7 @@ public class LiveIndex_old<T> extends Index {
      * @param cardinality number of rows to index
      * @param javaType    type of Column
      */
-    public LiveIndex_old(int cardinality, JavaType javaType) {
+    public LiveIndex_LL(int cardinality, JavaType javaType) {
         super(cardinality);
 
         index = new ConcurrentHashMap<>();
@@ -56,10 +56,9 @@ public class LiveIndex_old<T> extends Index {
         if (nrIndexed == cardinality) return;
         if (data != null) {
             if (!index.containsKey(data)) {
-                index.put(data, new ArrayList<>(Collections.singletonList(n)));
-                //indexPositions.put(data, 0);
+                index.put(data, new LinkedList<>(Collections.singletonList(n)));
             } else {
-                index.get(data).add(n);
+                index.get(data).addLast(n);
             }
             nrIndexed++;
         }
@@ -73,7 +72,7 @@ public class LiveIndex_old<T> extends Index {
      */
     public int getNextHashLine(T data) {
         if (!data.equals(lastRequest)) indexPosition = 0;
-        ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
+        LinkedList<Integer> dataPositions = index.getOrDefault(data, null);
         lastRequest = data;
         if (dataPositions == null) {
             indexPosition = 0;
@@ -86,13 +85,6 @@ public class LiveIndex_old<T> extends Index {
         int returnLine = dataPositions.get(indexPosition);
         indexPosition++;
         return returnLine;
-        /*int newIndex = indexPositions.getOrDefault(data, -1);
-        if(newIndex >= 0 && data != lastRequest) newIndex = 0;
-        lastRequest = data;
-        if (newIndex < 0) return newIndex;
-        ArrayList<Integer> dataPositions = index.get(data);
-        indexPositions.put(data, (newIndex + 1) % dataPositions.size());
-        return dataPositions.get(newIndex);*/
     }
 
     /**

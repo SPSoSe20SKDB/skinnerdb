@@ -2,13 +2,13 @@ package indexing;
 
 import types.JavaType;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveIndex<T> extends Index {
     public int nrIndexed = 0;
-    private final ConcurrentHashMap<T, LinkedList<Integer>> index;
+    private final ConcurrentHashMap<T, ArrayList<Integer>> index;
     private int indexPosition;
     //private ConcurrentHashMap<T, Integer> indexPositions;
     private T lastRequest;
@@ -56,9 +56,10 @@ public class LiveIndex<T> extends Index {
         if (nrIndexed == cardinality) return;
         if (data != null) {
             if (!index.containsKey(data)) {
-                index.put(data, new LinkedList<>(Collections.singletonList(n)));
+                index.put(data, new ArrayList<>(Collections.singletonList(n)));
+                //indexPositions.put(data, 0);
             } else {
-                index.get(data).addLast(n);
+                index.get(data).add(n);
             }
             nrIndexed++;
         }
@@ -72,7 +73,7 @@ public class LiveIndex<T> extends Index {
      */
     public int getNextHashLine(T data) {
         if (!data.equals(lastRequest)) indexPosition = 0;
-        LinkedList<Integer> dataPositions = index.getOrDefault(data, null);
+        ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
         lastRequest = data;
         if (dataPositions == null) {
             indexPosition = 0;
@@ -85,6 +86,13 @@ public class LiveIndex<T> extends Index {
         int returnLine = dataPositions.get(indexPosition);
         indexPosition++;
         return returnLine;
+        /*int newIndex = indexPositions.getOrDefault(data, -1);
+        if(newIndex >= 0 && data != lastRequest) newIndex = 0;
+        lastRequest = data;
+        if (newIndex < 0) return newIndex;
+        ArrayList<Integer> dataPositions = index.get(data);
+        indexPositions.put(data, (newIndex + 1) % dataPositions.size());
+        return dataPositions.get(newIndex);*/
     }
 
     /**
