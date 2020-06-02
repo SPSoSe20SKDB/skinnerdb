@@ -3,6 +3,7 @@ package postprocessing;
 import java.util.ArrayList;
 import java.util.List;
 
+import benchmark.JoinCompare;
 import buffer.BufferManager;
 import catalog.CatalogManager;
 import catalog.info.ColumnInfo;
@@ -566,5 +567,8 @@ public class PostProcessor {
 		CatalogManager.updateStats(resultRel);
 		// Measure time and store as statistics
 		PostStats.postMillis = System.currentTimeMillis() - startMillis;
+		System.out.println("Duration of post-processing: " + PostStats.postMillis + "ms");
+		// Measure storage allocation after post-processing
+		System.out.println("Storage allocation after Post: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 	}
 }
