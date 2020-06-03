@@ -1,5 +1,6 @@
 package postprocessing;
 
+import benchmark.JoinCompare;
 import buffer.BufferManager;
 import catalog.CatalogManager;
 import catalog.info.ColumnInfo;
@@ -522,16 +523,17 @@ public class PostProcessor {
 			String resultRel, boolean tempResult) throws Exception {
 		// Start counter
 		long startMillis = System.currentTimeMillis();
+		long startRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory();
 		// Store full result in preliminary table if limit specified 
-		boolean hasLimit = query.limit!=-1;
-		String preLimitResult = hasLimit?NamingConfig.PRE_LIMIT_TBL:resultRel;
+		boolean hasLimit = query.limit != -1;
+		String preLimitResult = hasLimit ? NamingConfig.PRE_LIMIT_TBL : resultRel;
 		boolean preLimitTemp = hasLimit || tempResult;
 		// Distinguish type of query
 		switch (query.aggregationType) {
-		case NONE:
-			treatNoAggregatesQuery(query, context, 
-					preLimitResult, preLimitTemp);
-			break;
+			case NONE:
+				treatNoAggregatesQuery(query, context,
+						preLimitResult, preLimitTemp);
+				break;
 		case ALL_ROWS:
 			treatAllRowsAggQuery(query, context, 
 					preLimitResult, preLimitTemp);
@@ -561,6 +563,7 @@ public class PostProcessor {
 		CatalogManager.updateStats(resultRel);
 		// Measure time and store as statistics
 		PostStats.postMillis = System.currentTimeMillis() - startMillis;
+		PostStats.postRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
 		//System.out.println("Duration of post-processing: " + PostStats.postMillis + "ms");
 		// Measure storage allocation after post-processing
 		//System.out.println("Storage allocation after Post: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");

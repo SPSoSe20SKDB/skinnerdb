@@ -1,5 +1,6 @@
 package joining;
 
+import benchmark.JoinCompare;
 import catalog.CatalogManager;
 import config.JoinConfig;
 import config.LoggingConfig;
@@ -46,6 +47,7 @@ public class JoinProcessor {
 							   Context context) throws Exception {
 		// Initialize statistics
 		long startMillis = System.currentTimeMillis();
+		long startRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory();
 		JoinStats.nrTuples = 0;
 		JoinStats.nrIndexLookups = 0;
 		JoinStats.nrIndexEntries = 0;
@@ -112,8 +114,8 @@ public class JoinProcessor {
 		while (!joinOp.isFinished()) {
 			++roundCtr;
 			double reward = root.sample(roundCtr, joinOrder, policy);
-			System.out.print(Arrays.toString(joinOrder) + ": ");
-			System.out.println(joinOp.result.getTuples().size());
+			//System.out.print(Arrays.toString(joinOrder) + ": ");
+			//System.out.println(joinOp.result.getTuples().size());
 			// Count reward except for final sample
 			if (!joinOp.isFinished()) {
 				accReward += reward;
@@ -205,6 +207,7 @@ public class JoinProcessor {
 				getCardinality(NamingConfig.JOINED_NAME);
 		// Measure execution time for join phase
 		JoinStats.joinMillis = System.currentTimeMillis() - startMillis;
+		JoinStats.joinRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
 
 		// print statistics
 		//System.out.println("Duration of join phase: " + JoinStats.joinMillis + "ms");

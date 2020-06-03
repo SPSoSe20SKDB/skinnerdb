@@ -4,15 +4,16 @@ package statistics;
  * Statistics about the join phase - most statistics
  * refer to counts achieved during the last query
  * evaluation.
- * 
+ *
  * @author immanueltrummer
  *
  */
 public class JoinStats {
-	/**
-	 * Duration of join phase in milliseconds.
-	 */
-	public static long joinMillis = 0;
+    /**
+     * Duration of join phase in milliseconds.
+     */
+    public static long joinMillis = 0;
+    public static long joinRam = 0;
     /**
      * Number of (complete and partial) tuples considered
      * during the last invocation.

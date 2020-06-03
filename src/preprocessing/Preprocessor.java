@@ -1,5 +1,6 @@
 package preprocessing;
 
+import benchmark.JoinCompare;
 import config.JoinConfig;
 import config.LoggingConfig;
 import config.NamingConfig;
@@ -60,6 +61,7 @@ public class Preprocessor {
 	public static Context process(QueryInfo query) throws Exception {
 		// Start counter
 		long startMillis = System.currentTimeMillis();
+		long startRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory();
 		// Reset error flag
 		hadError = false;
 		// Collect columns required for joins and post-processing
@@ -133,6 +135,7 @@ public class Preprocessor {
 		if (!JoinConfig.USE_RIPPLE) createJoinIndices(query, preSummary);
 		// Measure processing time
 		PreStats.preMillis = System.currentTimeMillis() - startMillis;
+		PreStats.preRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
 		return preSummary;
 	}
 	/**
