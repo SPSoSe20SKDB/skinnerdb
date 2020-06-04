@@ -5,10 +5,7 @@ import catalog.info.ColumnInfo;
 import config.JoinConfig;
 import expressions.ExpressionInfo;
 import expressions.compilation.KnaryBoolEval;
-import joining.join.JoinDoubleWrapper;
-import joining.join.JoinIndexWrapper;
-import joining.join.JoinIntWrapper;
-import joining.join.JoinNoIndexWrapper;
+import joining.join.*;
 import net.sf.jsqlparser.expression.Expression;
 import preprocessing.Context;
 import query.ColumnRef;
@@ -96,7 +93,7 @@ public class LeftDeepPlan {
                     switch (TypeUtil.toJavaType(firstInfo.type)) {
                         case INT:
                             if (JoinConfig.USE_RIPPLE) {
-                                joinIndices.get(joinCtr).add(new JoinNoIndexWrapper<Integer>(query, preSummary, joinCols, order, TypeUtil.toJavaType(firstInfo.type)));
+                                joinIndices.get(joinCtr).add(new JoinNoIndexIntWrapper(query, preSummary, joinCols, order));
                             } else {
                                 joinIndices.get(joinCtr).add(new JoinIntWrapper(
                                         query, preSummary, joinCols, order));
@@ -104,7 +101,7 @@ public class LeftDeepPlan {
                             break;
                         case DOUBLE:
                             if (JoinConfig.USE_RIPPLE) {
-                                joinIndices.get(joinCtr).add(new JoinNoIndexWrapper<Double>(query, preSummary, joinCols, order, TypeUtil.toJavaType(firstInfo.type)));
+                                joinIndices.get(joinCtr).add(new JoinNoIndexDoubleWrapper(query, preSummary, joinCols, order));
                             } else {
                                 joinIndices.get(joinCtr).add(new JoinDoubleWrapper(
                                         query, preSummary, joinCols, order));

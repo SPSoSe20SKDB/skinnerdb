@@ -1,16 +1,6 @@
 package indexing;
 
-import types.JavaType;
-
-import java.util.LinkedList;
-import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-
-public class LiveIndex<T> extends Index {
-    /**
-     * Structure for index hash table
-     */
-    private final ConcurrentHashMap<T, LinkedList<Integer>> index;
+public abstract class LiveIndex extends Index {
     /**
      * indexed lines
      */
@@ -29,12 +19,9 @@ public class LiveIndex<T> extends Index {
      * Initialize for given cardinality of indexed table.
      *
      * @param cardinality number of rows to index
-     * @param javaType    type of Column
      */
-    public LiveIndex(int cardinality, JavaType javaType) {
+    public LiveIndex(int cardinality) {
         super(cardinality);
-
-        index = new ConcurrentHashMap<>();
     }
 
     /**
@@ -51,49 +38,6 @@ public class LiveIndex<T> extends Index {
         int returnIndex = listIndex;
         listIndex++;
         return returnIndex;
-    }
-
-    /**
-     * Datum mit Zeilennummer dem Hash hinzufügen
-     *
-     * @param n    Zeilennummer
-     * @param data Datum
-     */
-    public void addHash(int n, T data) {
-        if (nrIndexed == cardinality) return;
-        if (data != null) {
-            if (!index.containsKey(data)) {
-                index.put(data, new LinkedList<>(Collections.singletonList(n)));
-            } else {
-                index.get(data).addLast(n);
-            }
-            nrIndexed++;
-        }
-    }
-
-    /**
-     * Hash-Tabellen-Abfrage zu Datum
-     *
-     * @param data Datenobjekt in erster Tabelle, zu dem die nächste verfügbaren Zeile in zweiter Tabelle zurückgegeben wird.
-     * @return Zeilenindice zu dem gegebenen Datum ()
-     */
-    public int getNextHashLine(T data, int prevTuple) {
-        // get position of date in table
-        LinkedList<Integer> dataPositions = index.getOrDefault(data, null);
-
-        // if positions equals null, data is not present in table
-        if (dataPositions == null) {
-            return cardinality;
-        }
-
-        // loop through index, find next index
-        for (int i = 0; i < dataPositions.size(); i++) {
-            int nextTuple = dataPositions.get(i);
-            if (nextTuple > prevTuple) return nextTuple;
-        }
-
-        // if not found return cardinality
-        return cardinality;
     }
 
     /**

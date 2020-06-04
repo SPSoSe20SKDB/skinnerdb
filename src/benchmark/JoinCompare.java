@@ -16,10 +16,11 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class JoinCompare {
+    public static final boolean printDebug = false;
+    public static final int amountTesting = 100;
     public static int yes = 0;
     public static int no = 0;
     public static int sum = 0;
-    public static final boolean printDebug = false;
     public static Runtime rt = Runtime.getRuntime();
     public static double timeDiff = 0;
     public static double timeDiffPre = 0;
@@ -29,10 +30,31 @@ public class JoinCompare {
     public static double ramDiffPre = 0;
     public static double ramDiffJoin = 0;
     public static double ramDiffPost = 0;
+    public static double ramDiffIndex = 0;
 
     public static void main(String[] args) throws Exception {
         GeneralConfig.isComparing = true;
 
+        for (int i = 1; i <= amountTesting; i++) {
+            test(args);
+        }
+
+        // at the end print summary
+        System.out.println("End");
+        System.out.println("Same: " + yes);
+        System.out.println("Not Same: " + no);
+        System.out.println();
+        String pattern = "%7s %1s %8s %3s %8s %1s";
+        System.out.println(String.format(pattern, "Metrik", "|", "RAM", "|", "Zeit", ""));
+        System.out.println(String.format("%s", "---------------------------------"));
+        System.out.println(String.format(pattern, "Sum", "|", (ramDiff >= 0 ? "+" : "") + round2(ramDiff), "% |", (timeDiff >= 0 ? "+" : "") + round2(timeDiff), "%"));
+        System.out.println(String.format(pattern, "Pre", "|", (ramDiffPre >= 0 ? "+" : "") + round2(ramDiffPre), "% |", (timeDiffPre >= 0 ? "+" : "") + round2(timeDiffPre), "%"));
+        System.out.println(String.format(pattern, "Join", "|", (ramDiffJoin >= 0 ? "+" : "") + round2(ramDiffJoin), "% |", (timeDiffJoin >= 0 ? "+" : "") + round2(timeDiffJoin), "%"));
+        System.out.println(String.format(pattern, "Post", "|", (ramDiffPost >= 0 ? "+" : "") + round2(ramDiffPost), "% |", (timeDiffPost >= 0 ? "+" : "") + round2(timeDiffPost), "%"));
+        System.out.println(String.format(pattern, "Index", "|", (ramDiffIndex >= 0 ? "+" : "") + round2(ramDiffIndex), "% |", "", ""));
+    }
+
+    public static void test(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
         long rippleTimePre;
@@ -50,6 +72,8 @@ public class JoinCompare {
         long noRippleRamJoin;
         long rippleRamPost;
         long noRippleRamPost;
+        long rippleRamIndex;
+        long noRippleRamIndex;
 
         if (args.length != 2) {
             System.out.println("Specify Skinner DB dir, " + "query directory");
@@ -68,10 +92,6 @@ public class JoinCompare {
 
         Path resultsPath = new File("skinnerResults.txt").toPath();
 
-        // clear hash tables
-        BufferManager.colToIndex.clear();
-        rt.gc();
-
         PreStats.preRam = 0;
         JoinStats.joinRam = 0;
         PostStats.postRam = 0;
@@ -79,6 +99,8 @@ public class JoinCompare {
         PreStats.preMillis = 0;
         JoinStats.joinMillis = 0;
         PostStats.postMillis = 0;
+
+        rt.gc();
 
         // setup config for original-join
         PreConfig.PRE_FILTER = true;
@@ -95,6 +117,14 @@ public class JoinCompare {
         // save result-tuples
         String[] result1 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
+        rt.gc();
+
+        // clear hash tables
+        noRippleRamIndex = rt.totalMemory() - rt.freeMemory();
+        BufferManager.colToIndex.clear();
+        rt.gc();
+        noRippleRamIndex = noRippleRamIndex - (rt.totalMemory() - rt.freeMemory());
+
         noRippleRamPre = PreStats.preRam;
         noRippleRamJoin = JoinStats.joinRam;
         noRippleRamPost = PostStats.postRam;
@@ -103,10 +133,6 @@ public class JoinCompare {
         noRippleTimeJoin = JoinStats.joinMillis;
         noRippleTimePost = PostStats.postMillis;
 
-        // clear hash tables
-        BufferManager.colToIndex.clear();
-        rt.gc();
-
         PreStats.preRam = 0;
         JoinStats.joinRam = 0;
         PostStats.postRam = 0;
@@ -114,6 +140,8 @@ public class JoinCompare {
         PreStats.preMillis = 0;
         JoinStats.joinMillis = 0;
         PostStats.postMillis = 0;
+
+        rt.gc();
 
         // setup config for ripple-join
         PreConfig.PRE_FILTER = true;
@@ -129,6 +157,14 @@ public class JoinCompare {
         rippleRam = rt.totalMemory() - rt.freeMemory() - rippleRam;
         // save result-tuples
         String[] result2 = Files.readAllLines(resultsPath).toArray(new String[]{});
+
+        rt.gc();
+
+        // clear hash tables
+        rippleRamIndex = rt.totalMemory() - rt.freeMemory();
+        BufferManager.colToIndex.clear();
+        rt.gc();
+        rippleRamIndex = rippleRamIndex - (rt.totalMemory() - rt.freeMemory());
 
         rippleRamPre = PreStats.preRam;
         rippleRamJoin = JoinStats.joinRam;
@@ -164,30 +200,12 @@ public class JoinCompare {
         ramDiffPre = (ramDiffPre * (sum - 1) + ((rippleRamPre - noRippleRamPre) * 100.0d / noRippleRamPre)) / sum;
         ramDiffJoin = (ramDiffJoin * (sum - 1) + ((rippleRamJoin - noRippleRamJoin) * 100.0d / noRippleRamJoin)) / sum;
         ramDiffPost = (ramDiffPost * (sum - 1) + ((rippleRamPost - noRippleRamPost) * 100.0d / noRippleRamPost)) / sum;
+        ramDiffIndex = (ramDiffIndex * (sum - 1) + ((rippleRamIndex - noRippleRamIndex) * 100.0d / noRippleRamIndex)) / sum;
 
         System.out.println("-----------------------------------");
-
-        // at the end print summary
-        if (sum == 100) {
-            System.out.println("End");
-            System.out.println("Same: " + yes);
-            System.out.println("Not Same: " + no);
-            System.out.println();
-            String pattern = "%7s %1s %8s %3s %8s %1s";
-            System.out.println(String.format(pattern, "Metrik", "|", "RAM", "|", "Zeit", ""));
-            System.out.println(String.format("%s", "---------------------------------"));
-            System.out.println(String.format(pattern, "Sum", "|", (ramDiff >= 0 ? "+" : "") + round2(ramDiff), "% |", (timeDiff >= 0 ? "+" : "") + round2(timeDiff), "%"));
-            System.out.println(String.format(pattern, "Pre", "|", (ramDiffPre >= 0 ? "+" : "") + round2(ramDiffPre), "% |", (timeDiffPre >= 0 ? "+" : "") + round2(timeDiffPre), "%"));
-            System.out.println(String.format(pattern, "Join", "|", (ramDiffJoin >= 0 ? "+" : "") + round2(ramDiffJoin), "% |", (timeDiffJoin >= 0 ? "+" : "") + round2(timeDiffJoin), "%"));
-            System.out.println(String.format(pattern, "Post", "|", (ramDiffPost >= 0 ? "+" : "") + round2(ramDiffPost), "% |", (timeDiffPost >= 0 ? "+" : "") + round2(timeDiffPost), "%"));
-            return;
-        }
-
-        // continue testing
-        main(args);
     }
 
-    static boolean arePermutations(String[] arr1, String[] arr2) {
+    public static boolean arePermutations(String[] arr1, String[] arr2) {
         if (arr1.length != arr2.length) return false;
         HashMap<String, Integer> hM = new HashMap<>();
         for (int i = 0; i < arr1.length; i++) {

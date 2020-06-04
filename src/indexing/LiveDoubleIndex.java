@@ -1,56 +1,24 @@
 package indexing;
 
-import types.JavaType;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class LiveIndex_ArrayList<T> extends Index {
+public class LiveDoubleIndex extends LiveIndex {
     /**
      * Structure for index hash table
      */
-    private final ConcurrentHashMap<T, ArrayList<Integer>> index;
-    /**
-     * indexed lines
-     */
-    public int nrIndexed = 0;
-    /**
-     * state if index is fully build
-     */
-    private boolean isReady = false;
-
-    /**
-     * current row when indexing
-     */
-    private int listIndex = 0;
+    private final ConcurrentHashMap<Double, ArrayList<Integer>> index;
 
     /**
      * Initialize for given cardinality of indexed table.
      *
      * @param cardinality number of rows to index
-     * @param javaType    type of Column
      */
-    public LiveIndex_ArrayList(int cardinality, JavaType javaType) {
+    public LiveDoubleIndex(int cardinality) {
         super(cardinality);
 
         index = new ConcurrentHashMap<>();
-    }
-
-    /**
-     * Nächsten Tabelleninces (Iterator-mäßig) zurückgeben
-     *
-     * @return Zeilennummer innerhalb der Spalte
-     */
-    public int getNextNotHashed() {
-        if (listIndex == cardinality) {
-            listIndex = 0;
-            isReady = true;
-            return cardinality;
-        }
-        int returnIndex = listIndex;
-        listIndex++;
-        return returnIndex;
     }
 
     /**
@@ -59,7 +27,7 @@ public class LiveIndex_ArrayList<T> extends Index {
      * @param n    Zeilennummer
      * @param data Datum
      */
-    public void addHash(int n, T data) {
+    public void addHash(int n, Double data) {
         if (nrIndexed == cardinality) return;
         if (data != null) {
             if (!index.containsKey(data)) {
@@ -77,7 +45,7 @@ public class LiveIndex_ArrayList<T> extends Index {
      * @param data Datenobjekt in erster Tabelle, zu dem die nächste verfügbaren Zeile in zweiter Tabelle zurückgegeben wird.
      * @return Zeilenindice zu dem gegebenen Datum ()
      */
-    public int getNextHashLine(T data, int prevTuple) {
+    public int getNextHashLine(Double data, int prevTuple) {
         // get position of date in table
         ArrayList<Integer> dataPositions = index.getOrDefault(data, null);
 
@@ -94,14 +62,5 @@ public class LiveIndex_ArrayList<T> extends Index {
 
         // if not found return cardinality
         return cardinality;
-    }
-
-    /**
-     * Ist Hash-Tabelle fertig gebaut
-     *
-     * @return Hash-Tabelle fertig
-     */
-    public boolean isReady() {
-        return isReady;
     }
 }
