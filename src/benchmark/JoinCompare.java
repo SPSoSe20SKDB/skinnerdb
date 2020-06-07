@@ -16,26 +16,31 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class JoinCompare {
-    public static final boolean printDebug = false;
-    public static final int amountTesting = 100;
+    public static final boolean printDebug = true;
+    public static final int amountTesting = 50;
+    public static final int forgetSkip = amountTesting / 2;
     public static int yes = 0;
     public static int no = 0;
     public static int sum = 0;
     public static Runtime rt = Runtime.getRuntime();
-    public static double timeDiff = 0;
-    public static double timeDiffPre = 0;
-    public static double timeDiffJoin = 0;
-    public static double timeDiffPost = 0;
-    public static double ramDiff = 0;
-    public static double ramDiffPre = 0;
-    public static double ramDiffJoin = 0;
-    public static double ramDiffPost = 0;
-    public static double ramDiffIndex = 0;
+    public static Path resultsPath = new File("skinnerResults.txt").toPath();
+
+    public static double[][] metrics = new double[8][5];
+
+    public static String pattern = "%7s %1s %8s %3s %8s %3s %8s %4s %8s %4s %8s %3s %8s %3s %8s %4s %8s %2s";
 
     public static void main(String[] args) throws Exception {
         GeneralConfig.isComparing = true;
 
-        for (int i = 1; i <= amountTesting; i++) {
+        if (args.length != 2) {
+            System.out.println("Specify Skinner DB dir, " + "query directory");
+            return;
+        }
+
+        // load database to ram on first run
+
+        for (int i = 0; i < amountTesting; i++) {
+            if (i == 0 || (forgetSkip > 0 && i % forgetSkip == 0)) initDB(args);
             test(args);
         }
 
@@ -44,14 +49,28 @@ public class JoinCompare {
         System.out.println("Same: " + yes);
         System.out.println("Not Same: " + no);
         System.out.println();
-        String pattern = "%7s %1s %8s %3s %8s %1s";
-        System.out.println(String.format(pattern, "Metrik", "|", "RAM", "|", "Zeit", ""));
-        System.out.println(String.format("%s", "---------------------------------"));
-        System.out.println(String.format(pattern, "Sum", "|", (ramDiff >= 0 ? "+" : "") + round2(ramDiff), "% |", (timeDiff >= 0 ? "+" : "") + round2(timeDiff), "%"));
-        System.out.println(String.format(pattern, "Pre", "|", (ramDiffPre >= 0 ? "+" : "") + round2(ramDiffPre), "% |", (timeDiffPre >= 0 ? "+" : "") + round2(timeDiffPre), "%"));
-        System.out.println(String.format(pattern, "Join", "|", (ramDiffJoin >= 0 ? "+" : "") + round2(ramDiffJoin), "% |", (timeDiffJoin >= 0 ? "+" : "") + round2(timeDiffJoin), "%"));
-        System.out.println(String.format(pattern, "Post", "|", (ramDiffPost >= 0 ? "+" : "") + round2(ramDiffPost), "% |", (timeDiffPost >= 0 ? "+" : "") + round2(timeDiffPost), "%"));
-        System.out.println(String.format(pattern, "Index", "|", (ramDiffIndex >= 0 ? "+" : "") + round2(ramDiffIndex), "% |", "", ""));
+
+        for (int i = 0; i < 5; i++) {
+            metrics[1][i] = calcPer(metrics[2][i], metrics[3][i]);
+            metrics[5][i] = calcPer(metrics[6][i], metrics[7][i]);
+        }
+
+        System.out.println(String.format(pattern, "Metrik", "|", "RAM % X", "|", "RAM % N", "|", "RAM R", "|", "RAM NR", "|", "Zeit % X", "|", "Zeit % N", "|", "Zeit R", "|", "Zeit NR", ""));
+        System.out.println(String.format("%s", "--------------------------------------------------------------------------------------------------------------------"));
+        System.out.println(formatTableLine("Sum", 0));
+        System.out.println(formatTableLine("Pre", 1));
+        System.out.println(formatTableLine("Join", 2));
+        System.out.println(formatTableLine("Post", 3));
+        System.out.println(formatTableLine("Index", 4));
+    }
+
+    private static void initDB(String[] args) throws Exception {
+        String SkinnerDbDir = args[0];
+        GeneralConfig.inMemory = true;
+        PathUtil.initSchemaPaths(SkinnerDbDir);
+        CatalogManager.loadDB(PathUtil.schemaPath);
+        PathUtil.initDataPaths(CatalogManager.currentDB);
+        BufferManager.loadDB();
     }
 
     public static void test(String[] args) throws Exception {
@@ -74,23 +93,6 @@ public class JoinCompare {
         long noRippleRamPost;
         long rippleRamIndex;
         long noRippleRamIndex;
-
-        if (args.length != 2) {
-            System.out.println("Specify Skinner DB dir, " + "query directory");
-            return;
-        }
-
-        // load database to ram on first run
-        if (sum == 0) {
-            String SkinnerDbDir = args[0];
-            GeneralConfig.inMemory = true;
-            PathUtil.initSchemaPaths(SkinnerDbDir);
-            CatalogManager.loadDB(PathUtil.schemaPath);
-            PathUtil.initDataPaths(CatalogManager.currentDB);
-            BufferManager.loadDB();
-        }
-
-        Path resultsPath = new File("skinnerResults.txt").toPath();
 
         PreStats.preRam = 0;
         JoinStats.joinRam = 0;
@@ -187,20 +189,42 @@ public class JoinCompare {
             if (printDebug) System.out.println("Not Same: " + no + " times / " + sum);
         }
         if (printDebug)
-            System.out.println("Time-Diff: " + (rippleTime - noRippleTime) + " ms; " + round2((rippleTime - noRippleTime) * 100.0d / noRippleTime) + " %; NoR: " + noRippleTime + " ms; R: " + rippleTime + " ms");
+            System.out.println("Time-Diff: " + formatDouble((rippleTime - noRippleTime), false, true) + " ms; " + formatDouble(calcPer(rippleTime, noRippleTime), false, true) + " %; NoR: " + formatDouble(noRippleTime, false, false) + " ms; R: " + formatDouble(rippleTime, false, false) + " ms");
         if (printDebug)
-            System.out.println("Ram-Diff: " + round2((rippleRam - noRippleRam) / 1024.0d / 1024) + " MB; " + round2((rippleRam - noRippleRam) * 100.0d / noRippleRam) + " %; NoR: " + round2(noRippleRam / 1024.0d / 1024) + " MB; R: " + round2(rippleRam / 1024.0d / 1024) + " MB");
+            System.out.println("Ram-Diff: " + formatDouble((rippleRam - noRippleRam), true, true) + " MB; " + formatDouble(calcPer(rippleRam, noRippleRam), false, true) + " %; NoR: " + formatDouble(noRippleRam, true, false) + " MB; R: " + formatDouble(rippleRam, true, false) + " MB");
 
-        timeDiff = (timeDiff * (sum - 1) + ((rippleTime - noRippleTime) * 100.0d / noRippleTime)) / sum;
-        timeDiffPre = (timeDiffPre * (sum - 1) + ((rippleTimePre - noRippleTimePre) * 100.0d / noRippleTimePre)) / sum;
-        timeDiffJoin = (timeDiffJoin * (sum - 1) + ((rippleTimeJoin - noRippleTimeJoin) * 100.0d / noRippleTimeJoin)) / sum;
-        timeDiffPost = (timeDiffPost * (sum - 1) + ((rippleTimePost - noRippleTimePost) * 100.0d / noRippleTimePost)) / sum;
+        metrics[0][0] = addVal(metrics[0][0], sum, calcPer(rippleRam, noRippleRam));
+        metrics[0][1] = addVal(metrics[0][1], sum, calcPer(rippleRamPre, noRippleRamPre));
+        metrics[0][2] = addVal(metrics[0][2], sum, calcPer(rippleRamJoin, noRippleRamJoin));
+        metrics[0][3] = addVal(metrics[0][3], sum, calcPer(rippleRamPost, noRippleRamPost));
+        metrics[0][4] = addVal(metrics[0][4], sum, calcPer(rippleRamIndex, noRippleRamIndex));
 
-        ramDiff = (ramDiff * (sum - 1) + ((rippleRam - noRippleRam) * 100.0d / noRippleRam)) / sum;
-        ramDiffPre = (ramDiffPre * (sum - 1) + ((rippleRamPre - noRippleRamPre) * 100.0d / noRippleRamPre)) / sum;
-        ramDiffJoin = (ramDiffJoin * (sum - 1) + ((rippleRamJoin - noRippleRamJoin) * 100.0d / noRippleRamJoin)) / sum;
-        ramDiffPost = (ramDiffPost * (sum - 1) + ((rippleRamPost - noRippleRamPost) * 100.0d / noRippleRamPost)) / sum;
-        ramDiffIndex = (ramDiffIndex * (sum - 1) + ((rippleRamIndex - noRippleRamIndex) * 100.0d / noRippleRamIndex)) / sum;
+        metrics[2][0] = addVal(metrics[2][0], sum, rippleRam);
+        metrics[2][1] = addVal(metrics[2][1], sum, rippleRamPre);
+        metrics[2][2] = addVal(metrics[2][2], sum, rippleRamJoin);
+        metrics[2][3] = addVal(metrics[2][3], sum, rippleRamPost);
+        metrics[2][4] = addVal(metrics[2][4], sum, rippleRamIndex);
+
+        metrics[3][0] = addVal(metrics[3][0], sum, noRippleRam);
+        metrics[3][1] = addVal(metrics[3][1], sum, noRippleRamPre);
+        metrics[3][2] = addVal(metrics[3][2], sum, noRippleRamJoin);
+        metrics[3][3] = addVal(metrics[3][3], sum, noRippleRamPost);
+        metrics[3][4] = addVal(metrics[3][4], sum, noRippleRamIndex);
+
+        metrics[4][0] = addVal(metrics[4][0], sum, calcPer(rippleTime, noRippleTime));
+        metrics[4][1] = addVal(metrics[4][1], sum, calcPer(rippleTimePre, noRippleTimePre));
+        metrics[4][2] = addVal(metrics[4][2], sum, calcPer(rippleTimeJoin, noRippleTimeJoin));
+        metrics[4][3] = addVal(metrics[4][3], sum, calcPer(rippleTimePost, noRippleTimePost));
+
+        metrics[6][0] = addVal(metrics[6][0], sum, rippleTime);
+        metrics[6][1] = addVal(metrics[6][1], sum, rippleTimePre);
+        metrics[6][2] = addVal(metrics[6][2], sum, rippleTimeJoin);
+        metrics[6][3] = addVal(metrics[6][3], sum, rippleTimePost);
+
+        metrics[7][0] = addVal(metrics[7][0], sum, noRippleTime);
+        metrics[7][1] = addVal(metrics[7][1], sum, noRippleTimePre);
+        metrics[7][2] = addVal(metrics[7][2], sum, noRippleTimeJoin);
+        metrics[7][3] = addVal(metrics[7][3], sum, noRippleTimePost);
 
         System.out.println("-----------------------------------");
     }
@@ -226,7 +250,47 @@ public class JoinCompare {
         return true;
     }
 
-    static double round2(double d) {
+    public static double round2(double d) {
         return Math.round(d * 100.0) / 100.0;
+    }
+
+    public static double addVal(double pre, int sum, double addVal) {
+        //return (pre * (sum - 1) + addVal) / sum;
+        return pre + addVal;
+    }
+
+    public static double calcPer(double ripple, double noRipple) {
+        return 100 * (ripple - noRipple) / noRipple;
+    }
+
+    public static String formatDouble(double d, boolean isRAM, boolean addPlus) {
+        if (isRAM) d = (d / 1024) / 1024;
+        d = round2(d);
+        if (!addPlus) return "" + d;
+        return (d > 0) ? "+" + d : "" + d;
+    }
+
+    public static String formatTableLine(String name, int metricIndex) {
+        return String.format(
+                pattern,
+                name,
+                "|",
+                formatDouble(metrics[0][metricIndex] / amountTesting, false, true),
+                "% |",
+                formatDouble(metrics[1][metricIndex], false, true),
+                "% |",
+                formatDouble(metrics[2][metricIndex] / amountTesting, true, false),
+                "MB |",
+                formatDouble(metrics[3][metricIndex] / amountTesting, true, false),
+                "MB |",
+                formatDouble(metrics[4][metricIndex] / amountTesting, false, true),
+                "% |",
+                formatDouble(metrics[5][metricIndex], false, true),
+                "% |",
+                formatDouble(metrics[6][metricIndex] / amountTesting, false, false),
+                "ms |",
+                formatDouble(metrics[7][metricIndex] / amountTesting, false, false),
+                "ms"
+        );
     }
 }
