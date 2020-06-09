@@ -91,4 +91,9 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
     public int nrIndexed(int[] tupleIndices) {
         return liveIndex.nrIndexed;
     }
+
+    @Override
+    public int getUnique() {
+        return liveIndex.index.size();
+    }
 }

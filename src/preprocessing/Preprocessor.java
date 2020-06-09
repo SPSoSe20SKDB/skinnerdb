@@ -124,20 +124,20 @@ public class Preprocessor {
 			} else {
 				String table = query.aliasToTable.get(alias);
 				preSummary.aliasToFiltered.put(alias, table);
-			}
-		});
-		// Abort pre-processing if filtering error occurred
-		if (hadError) {
-			throw new Exception("Error in pre-processor.");
-		}
-		// Create missing indices for columns involved in equi-joins.
-		log("Creating indices ...");
-		if (!JoinConfig.USE_RIPPLE) createJoinIndices(query, preSummary);
-		// Measure processing time
-		PreStats.preMillis = System.currentTimeMillis() - startMillis;
-		PreStats.preRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
-		return preSummary;
-	}
+            }
+        });
+        // Abort pre-processing if filtering error occurred
+        if (hadError) {
+            throw new Exception("Error in pre-processor.");
+        }
+        // Create missing indices for columns involved in equi-joins.
+        log("Creating indices ...");
+        if (!JoinConfig.USE_RIPPLE) createJoinIndices(query, preSummary);
+        // Measure processing time
+        PreStats.preMillis += System.currentTimeMillis() - startMillis;
+        PreStats.preRam += JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
+        return preSummary;
+    }
 	/**
 	 * Forms a conjunction between given conjuncts.
 	 * 
@@ -289,22 +289,22 @@ public class Preprocessor {
 				log("Creating index for " + queryRef +
 						" (query) - " + dbRef + " (DB)");
 				// Create index (unless it exists already)
-				Indexer.index(dbRef);
-			} catch (Exception e) {
-				System.err.println("Error creating index for " + queryRef);
-				e.printStackTrace();
-			}
-		});
-		long totalMillis = System.currentTimeMillis() - startMillis;
-		log("Created all indices in " + totalMillis + " ms.");
+                Indexer.index(dbRef);
+            } catch (Exception e) {
+                System.err.println("Error creating index for " + queryRef);
+                e.printStackTrace();
+            }
+        });
+        long totalMillis = System.currentTimeMillis() - startMillis;
+        log("Created all indices in " + totalMillis + " ms.");
 
-		// Measure time and store as statistics
-		PreStats.preMillis = System.currentTimeMillis() - startMillis;
-		//System.out.println("Duration of pre-processing: " + PreStats.preMillis + "ms");
-		// Measure storage allocation after pre-processing
-		//System.out.println("Storage allocation after Pre: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
+        // Measure time and store as statistics
+        //PreStats.preMillis = System.currentTimeMillis() - startMillis;
+        //System.out.println("Duration of pre-processing: " + PreStats.preMillis + "ms");
+        // Measure storage allocation after pre-processing
+        //System.out.println("Storage allocation after Pre: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 
-	}
+    }
 
 
 	/**

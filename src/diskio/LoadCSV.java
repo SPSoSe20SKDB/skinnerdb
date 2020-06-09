@@ -1,5 +1,18 @@
 package diskio;
 
+import buffer.BufferManager;
+import catalog.CatalogManager;
+import catalog.info.ColumnInfo;
+import catalog.info.TableInfo;
+import catalog.stats.TableStats;
+import com.opencsv.CSVReader;
+import config.GeneralConfig;
+import data.*;
+import query.ColumnRef;
+import types.JavaType;
+import types.SQLtype;
+import types.TypeUtil;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Date;
@@ -8,29 +21,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.opencsv.CSVReader;
-
-import buffer.BufferManager;
-import catalog.CatalogManager;
-import catalog.info.ColumnInfo;
-import catalog.info.TableInfo;
-import catalog.stats.TableStats;
-import config.GeneralConfig;
-import data.ColumnData;
-import data.DoubleData;
-import data.IntData;
-import data.LongData;
-import data.StringData;
-import query.ColumnRef;
-import types.JavaType;
-import types.SQLtype;
-import types.TypeUtil;
-
 /**
  * Loads CSV file into table.
- * 
- * @author immanueltrummer
  *
+ * @author immanueltrummer
  */
 public class LoadCSV {
 	/**
@@ -118,19 +112,23 @@ public class LoadCSV {
 				data.get(colCtr).isNull.set(rowCtr, isNull);
 				try {
 					switch (columnTypes[colCtr]) {
-					case ANY_TYPE:
-						throw new Exception("Cannot parse undetermined type");
-					case BYTE:
-					case INT:
-						IntData intData = ((IntData)data.get(colCtr));
-						intData.data[rowCtr] = isNull?0:Integer.parseInt(field);
-						break;
-					case LONG:
-						LongData longData = ((LongData)data.get(colCtr));
-						longData.data[rowCtr] = isNull?0:Long.parseLong(field);
-						break;
-					case DOUBLE:
-						DoubleData doubleData = ((DoubleData)data.get(colCtr));
+						case ANY_TYPE:
+							throw new Exception("Cannot parse undetermined type");
+						case STRING_CODE:
+							IntData stringCodeData = ((IntData) data.get(colCtr));
+							stringCodeData.data[rowCtr] = isNull ? 0 : field.hashCode();
+							break;
+						case BYTE:
+						case INT:
+							IntData intData = ((IntData) data.get(colCtr));
+							intData.data[rowCtr] = isNull ? 0 : Integer.parseInt(field);
+							break;
+						case LONG:
+							LongData longData = ((LongData) data.get(colCtr));
+							longData.data[rowCtr] = isNull ? 0 : Long.parseLong(field);
+							break;
+						case DOUBLE:
+							DoubleData doubleData = ((DoubleData)data.get(colCtr));
 						doubleData.data[rowCtr] = isNull?0:Double.parseDouble(field);
 						break;
 					case STRING:

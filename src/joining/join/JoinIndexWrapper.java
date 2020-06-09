@@ -133,15 +133,19 @@ public abstract class JoinIndexWrapper {
 	/**
 	 * Returns number of tuples indexed in next
 	 * table for given value in prior table.
-	 * 
-	 * @param tupleIndices	current tuple indices
-	 * @return	number of indexed tuples in next table
+	 *
+	 * @param tupleIndices    current tuple indices
+	 * @return number of indexed tuples in next table
 	 */
 	public abstract int nrIndexed(int[] tupleIndices);
-	
+
 	@Override
 	public String toString() {
-		return "Prior table:\t" + priorTable + 
+		return "Prior table:\t" + priorTable +
 				"; Next:\t" + nextTable;
+	}
+
+	public int getUnique() {
+		return nextIndex.cardinality;
 	}
 }

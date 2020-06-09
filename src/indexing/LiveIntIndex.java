@@ -8,7 +8,7 @@ public class LiveIntIndex extends LiveIndex {
     /**
      * Structure for index hash table
      */
-    private final ConcurrentHashMap<Integer, ArrayList<Integer>> index;
+    public final ConcurrentHashMap<Integer, ArrayList<Integer>> index;
 
     /**
      * Initialize for given cardinality of indexed table.

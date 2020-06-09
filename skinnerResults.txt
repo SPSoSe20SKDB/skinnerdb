@@ -1,3 +1,238 @@
+-----------------------------------------------------------------------------------------------------------------------------
+c_custkey	c_name	revenue	c_acctbal	n_name	c_address	c_phone	c_comment
+-----------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------
+----------------------------
+n_name	revenue
+----------------------------
+SAUDI ARABIA	6595133.623399999	
+IRAN	5472870.626099999	
+EGYPT	5296081.979199998	
+IRAQ	4827159.7404	
+JORDAN	3854956.2324000006	
+----------------------------
+-------------------------------------------------------------------------
+l_orderkey	revenue	o_orderdate	o_shippriority
+-------------------------------------------------------------------------
+181414	324788.1803	1995-03-08	0	
+519556	323264.52640000003	1995-02-15	0	
+240452	313961.4952	1995-03-11	0	
+311266	312662.4672	1995-02-17	0	
+474086	308660.1768	1995-03-13	0	
+453858	308459.3322	1995-03-10	0	
+209058	306913.0383	1995-03-22	0	
+448229	305523.89749999996	1995-03-18	0	
+132774	300310.3207	1995-02-27	0	
+468515	299912.5956	1995-03-18	0	
+-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
+----------------------------------------------------------------------------------------------------------------------------
+9993.46	Supplier#000000892	INDIA	141	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	391	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	641	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	1138	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	1389	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	1640	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	1891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	2135	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	2387	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	2639	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	2891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	3132	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	3385	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	3638	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	3891	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	4129	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	4383	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	4637	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	4891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	5126	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	5381	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	5636	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	5891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	6123	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	6379	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	6635	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	6891	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	7120	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	7377	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	7634	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	7891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	8117	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	8375	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	8633	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	8891	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	9114	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	9373	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	9632	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	9891	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	10111	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	10371	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	10631	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	10891	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	11108	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	11369	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	11630	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	11891	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	12105	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	12367	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	12629	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	12891	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	13102	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	13365	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	13628	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	13891	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	14099	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	14363	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	14627	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	14891	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	15096	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	15361	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	15626	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	15891	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	16093	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	16359	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	16625	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	16891	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	17090	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	17357	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	17624	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	17891	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	18087	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	18355	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	18623	Manufacturer#2	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	18891	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	19084	Manufacturer#3	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	19353	Manufacturer#4	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	19622	Manufacturer#5	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9993.46	Supplier#000000892	INDIA	19891	Manufacturer#1	j6prA4M3sX9a9xHem3HOZpYy	18-893-665-3629	mong the regular instructions. regular, regular dependen	
+9964.88	Supplier#000000855	INDONESIA	104	Manufacturer#1	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	354	Manufacturer#4	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	604	Manufacturer#4	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	854	Manufacturer#4	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	1101	Manufacturer#5	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	1352	Manufacturer#2	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	1603	Manufacturer#4	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	1854	Manufacturer#2	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	2098	Manufacturer#3	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	2350	Manufacturer#3	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	2602	Manufacturer#1	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	2854	Manufacturer#1	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	3095	Manufacturer#5	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	3348	Manufacturer#4	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	3601	Manufacturer#5	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	3854	Manufacturer#1	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	4092	Manufacturer#5	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	4346	Manufacturer#3	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	4600	Manufacturer#5	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+9964.88	Supplier#000000855	INDONESIA	4854	Manufacturer#2	ekQwhb9fh5VGIvMBJ m,yT571ICZpI,LEb1e	19-105-166-2849	ess patterns sublate blithely-- slyly pending requests use carefully about 	
+----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
+----------------------------------------------------------------------------------------------------------------------------
+9836.43	Supplier#000000489	IRAN	238	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	488	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	738	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	988	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	1237	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	1488	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	1735	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	1986	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	2236	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	2488	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	2732	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	2984	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	3235	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	3488	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	3729	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	3982	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	4234	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	4488	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	4726	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	4980	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	5233	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	5488	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	5723	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	5978	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	6232	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	6488	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	6720	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	6976	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	7231	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	7488	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	7717	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	7974	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	8230	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	8488	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	8714	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	8972	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	9229	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	9488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	9711	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	9970	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	10228	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	10488	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	10708	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	10968	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	11227	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	11488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	11705	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	11966	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	12226	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	12488	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	12702	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	12964	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	13225	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	13488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	13699	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	13962	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	14224	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	14488	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	14696	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	14960	Manufacturer#4	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	15223	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	15488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	15693	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	15958	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	16222	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	16488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	16690	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	16956	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	17221	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	17488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	17687	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	17954	Manufacturer#3	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	18220	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	18488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	18684	Manufacturer#2	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	18952	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	19219	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	19488	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	19681	Manufacturer#1	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9836.43	Supplier#000000489	IRAN	19950	Manufacturer#5	y9NMoYGxDUPfrB1GwjYhLtCeV7pOt	20-375-500-2226	 quickly carefully pending accounts. fina	
+9806.29	Supplier#000000144	SAUDI ARABIA	143	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	393	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	643	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	893	Manufacturer#1	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	1143	Manufacturer#2	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	1390	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	1641	Manufacturer#1	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	1892	Manufacturer#1	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	2143	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	2387	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	2639	Manufacturer#5	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	2891	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	3143	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	3384	Manufacturer#4	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	3637	Manufacturer#5	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	3890	Manufacturer#2	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	4143	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	4381	Manufacturer#1	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	4635	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+9806.29	Supplier#000000144	SAUDI ARABIA	4889	Manufacturer#3	f8tddEKps816HHqNwsKdn3	30-726-423-7363	 carefully even pinto beans n	
+----------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------
 s_acctbal	s_name	n_name	p_partkey	p_mfgr	s_address	s_phone	s_comment
 ----------------------------------------------------------------------------------------------------------------------------

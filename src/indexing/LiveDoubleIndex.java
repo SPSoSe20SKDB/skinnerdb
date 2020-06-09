@@ -8,7 +8,7 @@ public class LiveDoubleIndex extends LiveIndex {
     /**
      * Structure for index hash table
      */
-    private final ConcurrentHashMap<Double, ArrayList<Integer>> index;
+    public final ConcurrentHashMap<Double, ArrayList<Integer>> index;
 
     /**
      * Initialize for given cardinality of indexed table.

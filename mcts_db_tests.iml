@@ -46,5 +46,8 @@
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-params:5.7.0-M1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.7.0-M1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.junit.platform:junit-platform-engine:1.7.0-M1" level="project" />
+    <orderEntry type="library" name="jfreechart-1.0.19" level="project" />
+    <orderEntry type="library" name="jfreechart-1.0.19-swt" level="project" />
+    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
   </component>
 </module>

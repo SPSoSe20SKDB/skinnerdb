@@ -79,7 +79,7 @@ public class BenchMarkSkinner {
         //Measuring pre-processing time for each query
         BenchUtil.writeBenchHeader(benchOut);
         for (Entry<String, PlainSelect> entry : nameToQuery.entrySet()) {
-            //System.out.println(entry.getKey());
+            System.out.println(entry.getKey());
             //System.out.println(entry.getValue().toString());
             long startMillis = System.currentTimeMillis();
             QueryInfo query = new QueryInfo(entry.getValue(),

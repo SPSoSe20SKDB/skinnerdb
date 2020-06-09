@@ -552,7 +552,7 @@ public class PostProcessor {
 			// Fill with subset of pre-limit result rows
 			List<Integer> limitRows = new ArrayList<>();
 			int limit = Math.min(query.limit, preLimitCard);
-			for (int rowCtr=0; rowCtr<limit; ++rowCtr) {
+			for (int rowCtr = 0; rowCtr < limit; ++rowCtr) {
 				limitRows.add(rowCtr);
 			}
 			operators.Materialize.execute(preLimitResult,
@@ -562,8 +562,8 @@ public class PostProcessor {
 		// Update result table statistics
 		CatalogManager.updateStats(resultRel);
 		// Measure time and store as statistics
-		PostStats.postMillis = System.currentTimeMillis() - startMillis;
-		PostStats.postRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
+		PostStats.postMillis += System.currentTimeMillis() - startMillis;
+		PostStats.postRam += JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
 		//System.out.println("Duration of post-processing: " + PostStats.postMillis + "ms");
 		// Measure storage allocation after post-processing
 		//System.out.println("Storage allocation after Post: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");

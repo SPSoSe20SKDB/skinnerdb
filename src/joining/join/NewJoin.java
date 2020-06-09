@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NewJoin extends MultiWayJoin {
+    public final int[] tuplesFound;
+    public final int[] buildTupleIndex;
     /**
      * Number of steps per episode.
      */
@@ -76,6 +78,8 @@ public class NewJoin extends MultiWayJoin {
             }
         }
         this.tupleIndexDelta = new int[nrJoined];
+        this.buildTupleIndex = new int[nrJoined];
+        this.tuplesFound = new int[nrJoined];
         log("preSummary before join: " + preSummary.toString());
     }
 
@@ -101,6 +105,37 @@ public class NewJoin extends MultiWayJoin {
             progress += tupleIndexDelta[curTable] * weight;
         }
         return 0.5 * progress + 0.5 * nrResultTuples / (double) budget;
+    }
+
+    /**
+     * Calculates reward for progress during one invocation.
+     *
+     * @param joinOrder
+     * @param buildTupleIndex
+     * @param tuplesFound
+     * @param uniqueTuples
+     * @return
+     */
+    double reward2(int[] joinOrder, int[] buildTupleIndex, int[] tuplesFound, int[] uniqueTuples) {
+        double sumRatio = 0;
+        for (int pos = 0; pos < nrJoined; pos++) {
+            int curTable = joinOrder[pos];
+
+            double buildRatio = buildTupleIndex[curTable] * 1.0d / cardinalities[curTable];
+
+            double curFound;
+            if (tuplesFound[curTable] >= 0) curFound = tuplesFound[curTable];
+            else curFound = cardinalities[curTable] + tuplesFound[curTable];
+            double foundRatio = curFound * 1.0d / cardinalities[curTable];
+
+            double uniqueRatio = 1;
+            if (uniqueTuples[curTable] > 0)
+                uniqueRatio = (pos + 1) * (1 - uniqueTuples[curTable] / cardinalities[curTable]);
+
+            sumRatio += buildRatio * foundRatio * uniqueRatio;
+        }
+        //System.out.println(sumRatio);
+        return sumRatio;
     }
 
     /**
@@ -139,8 +174,20 @@ public class NewJoin extends MultiWayJoin {
         //logger.println("Start state " + state);
         int[] offsets = tracker.tableOffset;
         executeWithBudget(plan, state, offsets);
-        double reward = reward(joinOrder.order,
-                tupleIndexDelta, offsets);
+
+        int[] uniqueTuples = new int[nrJoined];
+        for (List<JoinIndexWrapper> joinIndicesSubList : plan.joinIndices) {
+            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+                uniqueTuples[joinIndice.nextTable] = joinIndice.getUnique();
+            }
+        }
+
+        double reward = reward(joinOrder.order, tupleIndexDelta, offsets);
+        //System.out.println(reward);
+        //double reward = reward2(joinOrder.order, buildTupleIndex, tuplesFound);
+        //double reward = reward2(joinOrder.order, buildTupleIndex, tupleIndexDelta, uniqueTuples);
+        //System.out.println(reward2);
+        //System.out.println("-");
         tracker.updateProgress(joinOrder, state);
         return reward;
     }
@@ -203,12 +250,19 @@ public class NewJoin extends MultiWayJoin {
         // Extract variables for convenient access
         int nrTables = query.nrJoined;
         int[] tupleIndices = new int[nrTables];
+        int[] buildIndexBefore = new int[nrTables];
         List<List<KnaryBoolEval>> applicablePreds = plan.applicablePreds;
         List<List<JoinIndexWrapper>> joinIndices = plan.joinIndices;
         // Initialize state and flags to prepare budgeted execution
         int joinIndex = state.lastIndex;
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             tupleIndices[tableCtr] = state.tupleIndices[tableCtr];
+        }
+
+        for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
+            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+                buildIndexBefore[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices);
+            }
         }
 
         int remainingBudget = budget;
@@ -294,6 +348,16 @@ public class NewJoin extends MultiWayJoin {
         state.lastIndex = joinIndex;
         for (int tableCtr = 0; tableCtr < nrTables; ++tableCtr) {
             state.tupleIndices[tableCtr] = tupleIndices[tableCtr];
+        }
+
+        for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
+            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+                if (joinIndice.nrIndexed(tupleIndices) == cardinalities[joinIndice.nextTable]) {
+                    buildTupleIndex[joinIndice.nextTable] = cardinalities[joinIndice.nextTable];
+                } else {
+                    buildTupleIndex[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices) - buildIndexBefore[joinIndice.nextTable];
+                }
+            }
         }
     }
 

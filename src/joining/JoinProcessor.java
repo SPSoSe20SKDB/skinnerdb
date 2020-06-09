@@ -196,25 +196,25 @@ public class JoinProcessor {
 				query.colsForPostProcessing,
 				context.columnMapping, targetRelName);
 		// Update processing context
-		context.columnMapping.clear();
-		for (ColumnRef postCol : query.colsForPostProcessing) {
-			String newColName = postCol.aliasName + "." + postCol.columnName;
-			ColumnRef newRef = new ColumnRef(targetRelName, newColName);
-			context.columnMapping.put(postCol, newRef);
-		}
-		// Store number of join result tuples
-		JoinStats.skinnerJoinCard = CatalogManager.
-				getCardinality(NamingConfig.JOINED_NAME);
-		// Measure execution time for join phase
-		JoinStats.joinMillis = System.currentTimeMillis() - startMillis;
-		JoinStats.joinRam = JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
+        context.columnMapping.clear();
+        for (ColumnRef postCol : query.colsForPostProcessing) {
+            String newColName = postCol.aliasName + "." + postCol.columnName;
+            ColumnRef newRef = new ColumnRef(targetRelName, newColName);
+            context.columnMapping.put(postCol, newRef);
+        }
+        // Store number of join result tuples
+        JoinStats.skinnerJoinCard = CatalogManager.
+                getCardinality(NamingConfig.JOINED_NAME);
+        // Measure execution time for join phase
+        JoinStats.joinMillis += System.currentTimeMillis() - startMillis;
+        JoinStats.joinRam += JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory() - startRam;
 
-		// print statistics
-		//System.out.println("Duration of join phase: " + JoinStats.joinMillis + "ms");
-		// Measure storage allocation after joining
-		//System.out.println("Storage allocation after joining: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
+        // print statistics
+        //System.out.println("Duration of join phase: " + JoinStats.joinMillis + "ms");
+        // Measure storage allocation after joining
+        //System.out.println("Storage allocation after joining: " + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) + " of " + JoinCompare.rt.totalMemory() + "(" + (JoinCompare.rt.totalMemory() - JoinCompare.rt.freeMemory()) * 100 / JoinCompare.rt.totalMemory() + "% storage usage)");
 
-	}
+    }
 
 	/**
 	 * Print out log entry if the maximal number of log
