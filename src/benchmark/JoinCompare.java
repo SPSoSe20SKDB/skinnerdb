@@ -21,7 +21,6 @@ import statistics.PreStats;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +29,7 @@ import java.util.Random;
 
 public class JoinCompare {
     public static final boolean printDebug = true;
-    public static final int amountTesting = 10;
+    public static final int amountTesting = 100;
     public static final int forgetSkip = 0;
     public static int yes = 0;
     public static int no = 0;
@@ -38,7 +37,7 @@ public class JoinCompare {
     public static Runtime rt = Runtime.getRuntime();
     public static Path resultsPath = new File("skinnerResults.txt").toPath();
 
-    public static JFrame lastFrame;
+    public static JFreeChart chart;
 
     public static double[][] metrics = new double[8][5];
 
@@ -97,27 +96,28 @@ public class JoinCompare {
         defaultCategoryDataset.addValue(metrics[2][0] / 1024 / 1024 / sum, s1, s3);
         defaultCategoryDataset.addValue(metrics[6][0] / sum, s1, s4);
 
-        final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
-        final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
-        final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
-        numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        numberAxis.setUpperMargin(0.15);
-        final CategoryItemRenderer renderer = categoryPlot.getRenderer();
-        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
-        renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
-        categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        if (chart != null) {
+            ((CategoryPlot) chart.getPlot()).setDataset(defaultCategoryDataset);
+        } else {
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
+            final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
+            final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
+            numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            numberAxis.setUpperMargin(0.15);
+            final CategoryItemRenderer renderer = categoryPlot.getRenderer();
+            renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
+            categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-        final ChartPanel contentPane = new ChartPanel(barChart);
-        contentPane.setPreferredSize(new Dimension(500, 270));
+            chart = barChart;
 
-        if (lastFrame != null) lastFrame.dispatchEvent(new WindowEvent(lastFrame, WindowEvent.WINDOW_CLOSING));
-
-        JFrame frame = new JFrame();
-        frame.setContentPane(contentPane);
-        frame.pack();
-        frame.setVisible(true);
-
-        lastFrame = frame;
+            final ChartPanel contentPane = new ChartPanel(barChart);
+            contentPane.setPreferredSize(new Dimension(500, 270));
+            JFrame frame = new JFrame();
+            frame.setContentPane(contentPane);
+            frame.pack();
+            frame.setVisible(true);
+        }
     }
 
     private static void initDB(String[] args) throws Exception {
