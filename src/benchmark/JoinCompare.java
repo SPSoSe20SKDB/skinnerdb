@@ -14,6 +14,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import statistics.JoinStats;
 import statistics.PostStats;
@@ -99,6 +100,8 @@ public class JoinCompare {
         defaultCategoryDataset.addValue(metrics[2][0] / 1024 / 1024 / sum, s1, s3);
         defaultCategoryDataset.addValue(metrics[6][0] / sum, s1, s4);
 
+        //defaultCategoryDataset.addValue(metrics[3][7] / 1024 / 1024 / sum, s2, s3);
+
         if (chart_zeit_messung != null) {
             ((CategoryPlot) chart_zeit_messung.getPlot()).setDataset(defaultCategoryDataset);
         }
@@ -116,7 +119,7 @@ public class JoinCompare {
             chart_zeit_messung = barChart;
 
             final ChartPanel contentPane = new ChartPanel(barChart);
-            contentPane.setPreferredSize(new Dimension(500, 270));
+            contentPane.setPreferredSize(new Dimension(500, 400));
             JFrame frame = new JFrame();
             frame.setContentPane(contentPane);
             frame.pack();
@@ -140,7 +143,7 @@ public class JoinCompare {
             chart_ram_messung = barChart;
 
             final ChartPanel contentPane = new ChartPanel(barChart);
-            contentPane.setPreferredSize(new Dimension(500, 100));
+            contentPane.setPreferredSize(new Dimension(500, 400));
             JFrame frame = new JFrame();
             frame.setContentPane(contentPane);
             frame.pack();
@@ -161,10 +164,10 @@ public class JoinCompare {
             renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
             categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-            chart_ram_messung = barChart;
+            chart_prozent = barChart;
 
             final ChartPanel contentPane = new ChartPanel(barChart);
-            contentPane.setPreferredSize(new Dimension(500, 100));
+            contentPane.setPreferredSize(new Dimension(500, 400));
             JFrame frame = new JFrame();
             frame.setContentPane(contentPane);
             frame.pack();
