@@ -74,6 +74,7 @@ public class JoinCompare {
             metrics[5][i] = calcPer(metrics[6][i], metrics[7][i]);
         }
 
+        // tabelarische datstellung
         System.out.println(String.format(pattern, "Metrik", "|", "RAM % X", "|", "RAM % N", "|", "RAM R", "|", "RAM NR", "|", "Zeit % X", "|", "Zeit % N", "|", "Zeit R", "|", "Zeit NR", ""));
         System.out.println(String.format("%s", "--------------------------------------------------------------------------------------------------------------------"));
         System.out.println(formatTableLine("Sum", 0));
@@ -129,6 +130,7 @@ public class JoinCompare {
         BufferManager.loadDB();
     }
 
+    //steuert den test, fürht die joins aus und misst werte
     public static void test(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
@@ -164,14 +166,18 @@ public class JoinCompare {
         PreConfig.PRE_FILTER = true;
         PreConfig.CONSIDER_INDICES = true;
         JoinConfig.USE_RIPPLE = false;
+
         // initialize time and ram measurement
         noRippleTime = System.currentTimeMillis();
         noRippleRam = rt.totalMemory() - rt.freeMemory();
+
         // run join
         BenchMarkSkinner.main(args);
+
         // save time and ram measurement
         noRippleTime = System.currentTimeMillis() - noRippleTime;
         noRippleRam = rt.totalMemory() - rt.freeMemory() - noRippleRam;
+
         // save result-tuples
         String[] result1 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
@@ -205,14 +211,18 @@ public class JoinCompare {
         PreConfig.PRE_FILTER = true;
         PreConfig.CONSIDER_INDICES = false;
         JoinConfig.USE_RIPPLE = true;
+
         // initialize time and ram measurement
         rippleTime = System.currentTimeMillis();
         rippleRam = rt.totalMemory() - rt.freeMemory();
+
         // run join
         BenchMarkSkinner.main(args);
+
         // save time and ram measurement
         rippleTime = System.currentTimeMillis() - rippleTime;
         rippleRam = rt.totalMemory() - rt.freeMemory() - rippleRam;
+
         // save result-tuples
         String[] result2 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
@@ -285,6 +295,7 @@ public class JoinCompare {
         System.out.println("-----------------------------------");
     }
 
+    //doppelt test?
     public static void testRev(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
@@ -361,14 +372,18 @@ public class JoinCompare {
         PreConfig.PRE_FILTER = true;
         PreConfig.CONSIDER_INDICES = true;
         JoinConfig.USE_RIPPLE = false;
+
         // initialize time and ram measurement
         noRippleTime = System.currentTimeMillis();
         noRippleRam = rt.totalMemory() - rt.freeMemory();
+
         // run join
         BenchMarkSkinner.main(args);
+
         // save time and ram measurement
         noRippleTime = System.currentTimeMillis() - noRippleTime;
         noRippleRam = rt.totalMemory() - rt.freeMemory() - noRippleRam;
+
         // save result-tuples
         String[] result1 = Files.readAllLines(resultsPath).toArray(new String[]{});
 
