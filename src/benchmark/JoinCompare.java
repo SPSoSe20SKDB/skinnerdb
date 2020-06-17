@@ -29,7 +29,7 @@ import java.util.Random;
 
 public class JoinCompare {
     public static final boolean printDebug = true;
-    public static final int amountTesting = 100;
+    public static final int amountTesting = 10; //verändert
     public static final int forgetSkip = 0;
     public static int yes = 0;
     public static int no = 0;
@@ -37,7 +37,9 @@ public class JoinCompare {
     public static Runtime rt = Runtime.getRuntime();
     public static Path resultsPath = new File("skinnerResults.txt").toPath();
 
-    public static JFreeChart chart;
+    public static JFreeChart chart_zeit_messung;
+    public static JFreeChart chart_ram_messung;
+    public static JFreeChart chart_prozent;
 
     public static double[][] metrics = new double[8][5];
 
@@ -97,10 +99,11 @@ public class JoinCompare {
         defaultCategoryDataset.addValue(metrics[2][0] / 1024 / 1024 / sum, s1, s3);
         defaultCategoryDataset.addValue(metrics[6][0] / sum, s1, s4);
 
-        if (chart != null) {
-            ((CategoryPlot) chart.getPlot()).setDataset(defaultCategoryDataset);
-        } else {
-            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
+        if (chart_zeit_messung != null) {
+            ((CategoryPlot) chart_zeit_messung.getPlot()).setDataset(defaultCategoryDataset);
+        }
+        else {
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Time-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
             final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
             final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
             numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -110,10 +113,58 @@ public class JoinCompare {
             renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
             categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 
-            chart = barChart;
+            chart_zeit_messung = barChart;
 
             final ChartPanel contentPane = new ChartPanel(barChart);
             contentPane.setPreferredSize(new Dimension(500, 270));
+            JFrame frame = new JFrame();
+            frame.setContentPane(contentPane);
+            frame.pack();
+            frame.setVisible(true);
+        }
+
+        if (chart_ram_messung != null) {
+            ((CategoryPlot) chart_ram_messung.getPlot()).setDataset(defaultCategoryDataset);
+        }
+        else {
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-RAM-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
+            final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
+            final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
+            numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            numberAxis.setUpperMargin(0.15);
+            final CategoryItemRenderer renderer = categoryPlot.getRenderer();
+            renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
+            categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+
+            chart_ram_messung = barChart;
+
+            final ChartPanel contentPane = new ChartPanel(barChart);
+            contentPane.setPreferredSize(new Dimension(500, 100));
+            JFrame frame = new JFrame();
+            frame.setContentPane(contentPane);
+            frame.pack();
+            frame.setVisible(true);
+        }
+
+        if (chart_prozent != null) {
+            ((CategoryPlot) chart_prozent.getPlot()).setDataset(defaultCategoryDataset);
+        }
+        else {
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark-Conclusion", "Metrik", "prozentual", defaultCategoryDataset);
+            final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
+            final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
+            numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+            numberAxis.setUpperMargin(0.15);
+            final CategoryItemRenderer renderer = categoryPlot.getRenderer();
+            renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            renderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
+            categoryPlot.getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+
+            chart_ram_messung = barChart;
+
+            final ChartPanel contentPane = new ChartPanel(barChart);
+            contentPane.setPreferredSize(new Dimension(500, 100));
             JFrame frame = new JFrame();
             frame.setContentPane(contentPane);
             frame.pack();
@@ -130,7 +181,7 @@ public class JoinCompare {
         BufferManager.loadDB();
     }
 
-    //steuert den test, fürht die joins aus und misst werte
+    //steuert den test, führt die joins aus und mist werte
     public static void test(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
