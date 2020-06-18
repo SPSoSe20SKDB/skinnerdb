@@ -92,21 +92,24 @@ public class JoinCompare {
         final String s2 = "NO RIPPLE";
         final String s3 = "RAM";
         final String s4 = "TIME";
-        final DefaultCategoryDataset defaultCategoryDataset = new DefaultCategoryDataset();
+        final DefaultCategoryDataset CategoryDataset_Time = new DefaultCategoryDataset();
+        final DefaultCategoryDataset CategoryDataset_Ram = new DefaultCategoryDataset();
+        final DefaultCategoryDataset CategoryDataset_Prozent = new DefaultCategoryDataset();
 
-        defaultCategoryDataset.addValue(metrics[3][0] / 1024 / 1024 / sum, s2, s3);
-        defaultCategoryDataset.addValue(metrics[7][0] / sum, s2, s4);
+        CategoryDataset_Ram.addValue(metrics[2][0] / 1024 / 1024 / sum, s3, s1);
+        CategoryDataset_Ram.addValue(metrics[3][0] / 1024 / 1024 /sum, s3, s2);
 
-        defaultCategoryDataset.addValue(metrics[2][0] / 1024 / 1024 / sum, s1, s3);
-        defaultCategoryDataset.addValue(metrics[6][0] / sum, s1, s4);
+        CategoryDataset_Time.addValue(metrics[6][0] / sum, s4, s1);
+        CategoryDataset_Time.addValue(metrics[7][0] / sum, s4, s2);
 
-        //defaultCategoryDataset.addValue(metrics[3][7] / 1024 / 1024 / sum, s2, s3);
+        CategoryDataset_Prozent.addValue(-metrics[4][0] / sum, "%", "Time");
+        CategoryDataset_Prozent.addValue(-metrics[0][0]  / sum, "%", "Ram");
 
         if (chart_zeit_messung != null) {
-            ((CategoryPlot) chart_zeit_messung.getPlot()).setDataset(defaultCategoryDataset);
+            ((CategoryPlot) chart_zeit_messung.getPlot()).setDataset(CategoryDataset_Time);
         }
         else {
-            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Time-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Time-Benchmark", "Metrik", "Zeit in ms", CategoryDataset_Time);
             final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
             final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
             numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -127,10 +130,10 @@ public class JoinCompare {
         }
 
         if (chart_ram_messung != null) {
-            ((CategoryPlot) chart_ram_messung.getPlot()).setDataset(defaultCategoryDataset);
+            ((CategoryPlot) chart_ram_messung.getPlot()).setDataset(CategoryDataset_Ram);
         }
         else {
-            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-RAM-Benchmark", "Metrik", "Nominalwert", defaultCategoryDataset);
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-RAM-Benchmark", "Metrik", "Ram-Verbrauch in MB", CategoryDataset_Ram);
             final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
             final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
             numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -151,10 +154,10 @@ public class JoinCompare {
         }
 
         if (chart_prozent != null) {
-            ((CategoryPlot) chart_prozent.getPlot()).setDataset(defaultCategoryDataset);
+            ((CategoryPlot) chart_prozent.getPlot()).setDataset(CategoryDataset_Prozent);
         }
         else {
-            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark-Conclusion", "Metrik", "prozentual", defaultCategoryDataset);
+            final JFreeChart barChart = ChartFactory.createBarChart("SkinnerDB - Ripple-Join-Extension-Benchmark-Conclusion", "Metrik", "Prozentual", CategoryDataset_Prozent);
             final CategoryPlot categoryPlot = (CategoryPlot) barChart.getPlot();
             final NumberAxis numberAxis = (NumberAxis) categoryPlot.getRangeAxis();
             numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
