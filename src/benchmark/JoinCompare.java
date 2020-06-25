@@ -14,7 +14,6 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import statistics.JoinStats;
 import statistics.PostStats;
@@ -30,7 +29,7 @@ import java.util.Random;
 
 public class JoinCompare {
     public static final boolean printDebug = true;
-    public static final int amountTesting = 10; //verändert
+    public static final int amountTesting = 10;
     public static final int forgetSkip = 0;
     public static int yes = 0;
     public static int no = 0;
@@ -77,7 +76,7 @@ public class JoinCompare {
             metrics[5][i] = calcPer(metrics[6][i], metrics[7][i]);
         }
 
-        // tabelarische datstellung
+        // tabellarische datstellung
         System.out.println(String.format(pattern, "Metrik", "|", "RAM % X", "|", "RAM % N", "|", "RAM R", "|", "RAM NR", "|", "Zeit % X", "|", "Zeit % N", "|", "Zeit R", "|", "Zeit NR", ""));
         System.out.println(String.format("%s", "--------------------------------------------------------------------------------------------------------------------"));
         System.out.println(formatTableLine("Sum", 0));
@@ -187,7 +186,6 @@ public class JoinCompare {
         BufferManager.loadDB();
     }
 
-    //steuert den test, führt die joins aus und mist werte
     public static void test(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
@@ -352,7 +350,6 @@ public class JoinCompare {
         System.out.println("-----------------------------------");
     }
 
-    //doppelt test?
     public static void testRev(String[] args) throws Exception {
         long rippleTime;
         long noRippleTime;
@@ -540,7 +537,7 @@ public class JoinCompare {
 
     public static double addVal(double pre, int sum, double addVal) {
         //return (pre * (sum - 1) + addVal) / sum;
-        return pre + addVal;
+        return (addVal > 0) ? pre + addVal : pre;
     }
 
     public static double calcPer(double ripple, double noRipple) {

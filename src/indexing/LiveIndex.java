@@ -15,6 +15,9 @@ public abstract class LiveIndex extends Index {
      */
     private int listIndex = 0;
 
+    protected Thread solidifyThread;
+    protected Thread addThread;
+
     /**
      * Initialize for given cardinality of indexed table.
      *
@@ -33,12 +36,16 @@ public abstract class LiveIndex extends Index {
         if (listIndex == cardinality) {
             listIndex = 0;
             isReady = true;
+            //solidifyThread = new Thread(this::solidify);
+            //solidifyThread.start();
             return cardinality;
         }
         int returnIndex = listIndex;
         listIndex++;
         return returnIndex;
     }
+
+    abstract void solidify();
 
     /**
      * Ist Hash-Tabelle fertig gebaut

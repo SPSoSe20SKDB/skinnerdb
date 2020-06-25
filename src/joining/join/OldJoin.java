@@ -231,8 +231,8 @@ public class OldJoin extends MultiWayJoin {
             // Evaluate all applicable predicates on joined tuples
             KnaryBoolEval unaryPred = unaryPreds[nextTable];
 
-            addVisitedTuples(tupleIndices);
-            buildAdditionalHashTable(nextTable, tupleIndices[nextTable], joinIndices);
+            //addVisitedTuples(tupleIndices);
+            //buildAdditionalHashTable(nextTable, tupleIndices[nextTable], joinIndices);
 
             if ((PreConfig.PRE_FILTER || unaryPred == null ||
                     unaryPred.evaluate(tupleIndices) > 0) &&

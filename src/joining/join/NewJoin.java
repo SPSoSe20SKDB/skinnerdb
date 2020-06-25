@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NewJoin extends MultiWayJoin {
-    public final int[] tuplesFound;
-    public final int[] buildTupleIndex;
+    //public final int[] tuplesFound;
+    //public final int[] buildTupleIndex;
     /**
      * Number of steps per episode.
      */
@@ -78,8 +78,8 @@ public class NewJoin extends MultiWayJoin {
             }
         }
         this.tupleIndexDelta = new int[nrJoined];
-        this.buildTupleIndex = new int[nrJoined];
-        this.tuplesFound = new int[nrJoined];
+        //this.buildTupleIndex = new int[nrJoined];
+        //this.tuplesFound = new int[nrJoined];
         log("preSummary before join: " + preSummary.toString());
     }
 
@@ -148,10 +148,10 @@ public class NewJoin extends MultiWayJoin {
      */
     @Override
     public double execute(int[] order) throws Exception {
-        log("Context:\t" + preSummary.toString());
-        log("Join order:\t" + Arrays.toString(order));
-        log("Aliases:\t" + Arrays.toString(query.aliases));
-        log("Cardinalities:\t" + Arrays.toString(cardinalities));
+        //log("Context:\t" + preSummary.toString());
+        //log("Join order:\t" + Arrays.toString(order));
+        //log("Aliases:\t" + Arrays.toString(query.aliases));
+        //log("Cardinalities:\t" + Arrays.toString(cardinalities));
         // Treat special case: at least one input relation is empty
         for (int tableCtr = 0; tableCtr < nrJoined; ++tableCtr) {
             if (cardinalities[tableCtr] == 0) {
@@ -163,24 +163,22 @@ public class NewJoin extends MultiWayJoin {
         JoinOrder joinOrder = new JoinOrder(order);
         LeftDeepPlan plan = planCache.get(joinOrder);
         if (plan == null) {
-
-
             plan = new LeftDeepPlan(query, preSummary, predToEval, order);
             planCache.put(joinOrder, plan);
         }
-        log(plan.toString());
+        //log(plan.toString());
         // Execute from starting state, save progress, return progress
         State state = tracker.continueFrom(joinOrder);
         //logger.println("Start state " + state);
         int[] offsets = tracker.tableOffset;
         executeWithBudget(plan, state, offsets);
 
-        int[] uniqueTuples = new int[nrJoined];
-        for (List<JoinIndexWrapper> joinIndicesSubList : plan.joinIndices) {
-            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
-                uniqueTuples[joinIndice.nextTable] = joinIndice.getUnique();
-            }
-        }
+        //int[] uniqueTuples = new int[nrJoined];
+        //for (List<JoinIndexWrapper> joinIndicesSubList : plan.joinIndices) {
+        //    for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+        //        uniqueTuples[joinIndice.nextTable] = joinIndice.getUnique();
+        //    }
+        //}
 
         double reward = reward(joinOrder.order, tupleIndexDelta, offsets);
         //System.out.println(reward);
@@ -250,7 +248,7 @@ public class NewJoin extends MultiWayJoin {
         // Extract variables for convenient access
         int nrTables = query.nrJoined;
         int[] tupleIndices = new int[nrTables];
-        int[] buildIndexBefore = new int[nrTables];
+        //int[] buildIndexBefore = new int[nrTables];
         List<List<KnaryBoolEval>> applicablePreds = plan.applicablePreds;
         List<List<JoinIndexWrapper>> joinIndices = plan.joinIndices;
         // Initialize state and flags to prepare budgeted execution
@@ -259,11 +257,11 @@ public class NewJoin extends MultiWayJoin {
             tupleIndices[tableCtr] = state.tupleIndices[tableCtr];
         }
 
-        for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
-            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
-                buildIndexBefore[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices);
-            }
-        }
+        //for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
+        //    for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+        //        buildIndexBefore[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices);
+        //    }
+        //}
 
         int remainingBudget = budget;
         // Number of completed tuples added
@@ -271,8 +269,9 @@ public class NewJoin extends MultiWayJoin {
         // Execute join order until budget depleted or all input finished -
         // at each iteration start, tuple indices contain next tuple
         // combination to look at.
-        boolean inGroupProcessing = false;
-        while ((remainingBudget > 0 || inGroupProcessing) && joinIndex >= 0) {
+        //boolean inGroupProcessing = false;
+        //while ((remainingBudget > 0 || inGroupProcessing) && joinIndex >= 0) {
+        while (remainingBudget > 0 && joinIndex >= 0) {
             ++JoinStats.nrIterations;
             // Get next table in join order
             int nextTable = plan.joinOrder.order[joinIndex];
@@ -286,7 +285,7 @@ public class NewJoin extends MultiWayJoin {
             if ((PreConfig.PRE_FILTER || unaryPred == null ||
                     unaryPred.evaluate(tupleIndices) > 0) &&
                     evaluateAll(applicablePreds.get(joinIndex), tupleIndices)) {
-                inGroupProcessing = true;
+                //inGroupProcessing = true;
 
                 ++JoinStats.nrTuples;
                 // Do we have a complete result row?
@@ -312,7 +311,7 @@ public class NewJoin extends MultiWayJoin {
                     joinIndex++;
                 }
             } else {
-                inGroupProcessing = false;
+                //inGroupProcessing = false;
 
                 // At least one of applicable predicates evaluates to false -
                 // try next tuple in same table.
@@ -350,15 +349,15 @@ public class NewJoin extends MultiWayJoin {
             state.tupleIndices[tableCtr] = tupleIndices[tableCtr];
         }
 
-        for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
-            for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
-                if (joinIndice.nrIndexed(tupleIndices) == cardinalities[joinIndice.nextTable]) {
-                    buildTupleIndex[joinIndice.nextTable] = cardinalities[joinIndice.nextTable];
-                } else {
-                    buildTupleIndex[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices) - buildIndexBefore[joinIndice.nextTable];
-                }
-            }
-        }
+        //for (List<JoinIndexWrapper> joinIndicesSubList : joinIndices) {
+        //    for (JoinIndexWrapper joinIndice : joinIndicesSubList) {
+        //        if (joinIndice.nrIndexed(tupleIndices) == cardinalities[joinIndice.nextTable]) {
+        //            buildTupleIndex[joinIndice.nextTable] = cardinalities[joinIndice.nextTable];
+        //        } else {
+        //            buildTupleIndex[joinIndice.nextTable] = joinIndice.nrIndexed(tupleIndices) - buildIndexBefore[joinIndice.nextTable];
+        //        }
+        //    }
+        //}
     }
 
     @Override

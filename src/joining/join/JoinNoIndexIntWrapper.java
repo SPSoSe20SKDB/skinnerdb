@@ -27,16 +27,20 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
     public JoinNoIndexIntWrapper(QueryInfo queryInfo, Context preSummary, Set<ColumnRef> joinCols, int[] order) throws Exception {
         super(queryInfo, preSummary, joinCols, order);
 
+        boolean isKey = false;
+
+        nextIntData = ((IntData) nextData);
+        priorIntData = ((IntData) priorData);
+
+        if (nextIntData.data[nextIntData.data.length - 1] == nextIntData.data.length - 1) isKey = true;
+
         if (nextIndex == null) {
-            nextIndex = new LiveIntIndex(nextData.cardinality);
+            nextIndex = new LiveIntIndex(nextData.cardinality, isKey);
             nextIndex.data = nextData;
             BufferManager.colToIndex.put(nextRef, nextIndex);
         }
 
         liveIndex = (LiveIntIndex) nextIndex;
-
-        nextIntData = ((IntData) nextData);
-        priorIntData = ((IntData) priorData);
     }
 
     @Override
@@ -45,7 +49,7 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
         int priorTuple = tupleIndices[priorTable];
 
         // get data from left table
-        Integer priorVal = priorIntData.data[priorTuple];
+        int priorVal = priorIntData.data[priorTuple];
 
         // get last probed row from right table
         int nextCurTuple = tupleIndices[nextTable];
@@ -60,7 +64,7 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
                 return liveIndex.cardinality;
                 // else build hash table further
             } else {
-                Integer nextVal;
+                int nextVal;
                 // loop through remaining table to find next appropriate line
                 do {
                     // get next not hashed line
@@ -68,7 +72,7 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
 
                     // when next line is higher than table, hash table is ready, delegate to this function
                     if (nextTuple >= liveIndex.cardinality) {
-                        return nextIndex(tupleIndices);
+                        return liveIndex.getNextHashLine(priorVal, nextCurTuple);
                     }
 
                     // get data from right table
@@ -77,14 +81,8 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
                     // add line to hash
                     liveIndex.addHash(nextTuple, nextVal);
                     // do while not found appropriate line
-                } while (!priorVal.equals(nextVal));
-
-                // if end, test if data is correct, else return cardinality
-                if (priorVal.equals(nextVal)) {
-                    return nextTuple;
-                } else {
-                    return liveIndex.cardinality;
-                }
+                } while (priorVal != nextVal);
+                return nextTuple;
             }
             // else if new line index from right table is applicable
         } else {

@@ -3,7 +3,6 @@ package joining.join;
 import buffer.BufferManager;
 import data.DoubleData;
 import indexing.LiveDoubleIndex;
-import indexing.LiveIntIndex;
 import preprocessing.Context;
 import query.ColumnRef;
 import query.QueryInfo;
@@ -29,7 +28,7 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
         super(queryInfo, preSummary, joinCols, order);
 
         if (nextIndex == null) {
-            nextIndex = new LiveIntIndex(nextData.cardinality);
+            nextIndex = new LiveDoubleIndex(nextData.cardinality);
             nextIndex.data = nextData;
             BufferManager.colToIndex.put(nextRef, nextIndex);
         }
