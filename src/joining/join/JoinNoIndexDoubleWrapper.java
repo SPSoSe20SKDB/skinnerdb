@@ -27,6 +27,9 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
     public JoinNoIndexDoubleWrapper(QueryInfo queryInfo, Context preSummary, Set<ColumnRef> joinCols, int[] order) throws Exception {
         super(queryInfo, preSummary, joinCols, order);
 
+        nextDoubleData = ((DoubleData) nextData);
+        priorDoubleData = ((DoubleData) priorData);
+
         if (nextIndex == null) {
             nextIndex = new LiveDoubleIndex(nextData.cardinality);
             nextIndex.data = nextData;
@@ -34,9 +37,6 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
         }
 
         liveIndex = (LiveDoubleIndex) nextIndex;
-
-        nextDoubleData = ((DoubleData) nextData);
-        priorDoubleData = ((DoubleData) priorData);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
         int priorTuple = tupleIndices[priorTable];
 
         // get data from left table
-        Double priorVal = priorDoubleData.data[priorTuple];
+        double priorVal = priorDoubleData.data[priorTuple];
 
         // get last probed row from right table
         int nextCurTuple = tupleIndices[nextTable];
@@ -60,7 +60,7 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
                 return liveIndex.cardinality;
                 // else build hash table further
             } else {
-                Double nextVal;
+                double nextVal;
                 // loop through remaining table to find next appropriate line
                 do {
                     // get next not hashed line
@@ -77,7 +77,7 @@ public class JoinNoIndexDoubleWrapper extends JoinIndexWrapper {
                     // add line to hash
                     liveIndex.addHash(nextTuple, nextVal);
                     // do while not found appropriate line
-                } while (!priorVal.equals(nextVal));
+                } while (priorVal != nextVal);
                 return nextTuple;
             }
             // else if new line index from right table is applicable

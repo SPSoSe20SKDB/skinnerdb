@@ -2,6 +2,7 @@ package indexing;
 
 import com.koloboke.collect.map.IntIntMap;
 import com.koloboke.collect.map.hash.HashIntIntMaps;
+import config.JoinConfig;
 
 import java.util.*;
 
@@ -12,8 +13,7 @@ public class LiveIntIndex extends LiveIndex {
     public Map<Integer, List<Integer>> index;
     public int[][] solidList;
     public IntIntMap keylist;
-    public boolean isKeyColumn = false;
-    public IntIntMap keyIndex;
+    public boolean isKeyColumn;
 
     /**
      * Initialize for given cardinality of indexed table.
@@ -23,12 +23,12 @@ public class LiveIntIndex extends LiveIndex {
     public LiveIntIndex(int cardinality, boolean isKey) {
         super(cardinality);
 
-        //isKeyColumn = isKey;
+        isKeyColumn = isKey;
 
         if (isKeyColumn) {
-            //keyIndex = HashIntIntMaps.newMutableMap(cardinality);
+            isReady = true;
         } else {
-            index = new WeakHashMap<>();
+            index = new HashMap<>();
         }
     }
 
@@ -63,18 +63,9 @@ public class LiveIntIndex extends LiveIndex {
      * @param data Datum
      */
     public void addHash(int n, Integer data) {
-        if (isKeyColumn) {
-            //keyIndex.put(data.intValue(),n);
-            //return;
-        }
+        if (isKeyColumn) return;
         //if (nrIndexed == cardinality) return;
         if (data != null) {
-            //if(addThread != null) try {
-            //    addThread.join(10);
-            //} catch(InterruptedException err) {
-
-            //}
-            //addThread = new Thread(() -> {
             if (!index.containsKey(data)) {
                 List<Integer> newList = new ArrayList<>(11);
                 newList.add(n);
@@ -82,9 +73,6 @@ public class LiveIntIndex extends LiveIndex {
             } else {
                 index.get(data).add(n);
             }
-            //});
-            //addThread.start();
-            //addThread.run();
             nrIndexed++;
         }
     }
@@ -96,16 +84,14 @@ public class LiveIntIndex extends LiveIndex {
      * @return Zeilenindice zu dem gegebenen Datum ()
      */
     public int getNextHashLine(Integer data, int prevTuple) {
-        /*
-        if(isReady()) {
-            if(solidifyThread != null) try {
+        if (JoinConfig.USE_RIPPLE_SOLIDIFY && isReady()) {
+            if (solidifyThread != null) try {
                 solidifyThread.join();
             } catch (InterruptedException err) {
-
             }
 
             int key = keylist.getOrDefault(data.intValue(), -1);
-            if(key < 0) return cardinality;
+            if (key < 0) return cardinality;
 
             int[] positions = solidList[key];
 
@@ -129,11 +115,9 @@ public class LiveIntIndex extends LiveIndex {
 
             return cardinality;
         }
-        */
 
         if (isKeyColumn) {
-            //return data.intValue();
-            //return keyIndex.getOrDefault(data.intValue(), cardinality);
+            return data.intValue();
         }
 
         // get position of date in table
@@ -155,7 +139,6 @@ public class LiveIntIndex extends LiveIndex {
                 lowerBound = middle;
             }
         }
-
 
         // loop through index, find next index
         for (int i = lowerBound; i <= upperBound; i++) {

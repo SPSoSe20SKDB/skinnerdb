@@ -53,4 +53,6 @@ public class JoinConfig {
 	 * hash tables on th fly
 	 */
 	public static boolean USE_RIPPLE = false;
+
+	public static final boolean USE_RIPPLE_SOLIDIFY = false;
 }

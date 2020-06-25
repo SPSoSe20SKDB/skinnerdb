@@ -1,5 +1,7 @@
 package indexing;
 
+import config.JoinConfig;
+
 public abstract class LiveIndex extends Index {
     /**
      * indexed lines
@@ -8,15 +10,17 @@ public abstract class LiveIndex extends Index {
     /**
      * state if index is fully build
      */
-    private boolean isReady = false;
+    protected boolean isReady = false;
 
     /**
      * current row when indexing
      */
     private int listIndex = 0;
 
+    /**
+     * Thread for solidify
+     */
     protected Thread solidifyThread;
-    protected Thread addThread;
 
     /**
      * Initialize for given cardinality of indexed table.
@@ -36,8 +40,10 @@ public abstract class LiveIndex extends Index {
         if (listIndex == cardinality) {
             listIndex = 0;
             isReady = true;
-            //solidifyThread = new Thread(this::solidify);
-            //solidifyThread.start();
+            if (JoinConfig.USE_RIPPLE_SOLIDIFY) {
+                solidifyThread = new Thread(this::solidify);
+                solidifyThread.start();
+            }
             return cardinality;
         }
         int returnIndex = listIndex;

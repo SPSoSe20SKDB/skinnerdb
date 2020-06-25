@@ -13,6 +13,7 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
     private final LiveIntIndex liveIndex;
     private final IntData nextIntData;
     private final IntData priorIntData;
+    private final boolean isKeyColumn;
 
     /**
      * Initialize index wrapper for
@@ -27,15 +28,14 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
     public JoinNoIndexIntWrapper(QueryInfo queryInfo, Context preSummary, Set<ColumnRef> joinCols, int[] order) throws Exception {
         super(queryInfo, preSummary, joinCols, order);
 
-        boolean isKey = false;
-
         nextIntData = ((IntData) nextData);
         priorIntData = ((IntData) priorData);
 
-        if (nextIntData.data[nextIntData.data.length - 1] == nextIntData.data.length - 1) isKey = true;
+        isKeyColumn = false;
+        //if (nextIntData.data[nextIntData.data.length - 1] == nextIntData.data.length - 1) isKey = true;
 
         if (nextIndex == null) {
-            nextIndex = new LiveIntIndex(nextData.cardinality, isKey);
+            nextIndex = new LiveIntIndex(nextData.cardinality, isKeyColumn);
             nextIndex.data = nextData;
             BufferManager.colToIndex.put(nextRef, nextIndex);
         }
@@ -50,6 +50,8 @@ public class JoinNoIndexIntWrapper extends JoinIndexWrapper {
 
         // get data from left table
         int priorVal = priorIntData.data[priorTuple];
+
+        if (isKeyColumn) return priorVal;
 
         // get last probed row from right table
         int nextCurTuple = tupleIndices[nextTable];

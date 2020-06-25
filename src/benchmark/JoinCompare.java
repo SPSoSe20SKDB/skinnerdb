@@ -29,7 +29,7 @@ import java.util.Random;
 
 public class JoinCompare {
     public static final boolean printDebug = true;
-    public static final int amountTesting = 10;
+    public static final int amountTesting = 1000;
     public static final int forgetSkip = 0;
     public static int yes = 0;
     public static int no = 0;
@@ -537,7 +537,8 @@ public class JoinCompare {
 
     public static double addVal(double pre, int sum, double addVal) {
         //return (pre * (sum - 1) + addVal) / sum;
-        return (addVal > 0) ? pre + addVal : pre;
+        //return (addVal > 0) ? pre + addVal : pre;
+        return pre + addVal;
     }
 
     public static double calcPer(double ripple, double noRipple) {
